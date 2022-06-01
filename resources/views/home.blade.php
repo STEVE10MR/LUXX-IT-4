@@ -17,7 +17,7 @@
                 <div class="banner">
                     <div class="banner-body">
                         <h3 class="text-uppercase text-night">Bienvenidos</h3>
-                        <p class="text-night">{{$value->titulo}}</p>
+                        <p class="text-night">{{$value->resena}}</p>
                         <a href="{{route('products.create_menu')}}" class="btn btn-warning"><i class="fas fa-hamburger fa-fw"></i> &nbsp; Ir al menu</a>
                     </div>
               </div>

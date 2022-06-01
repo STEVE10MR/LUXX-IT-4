@@ -8,17 +8,16 @@ use App\Http\Requests\SessionsFormUser;
 
 class SessionsController extends Controller
 {
-    
+
     public function store(SessionsFormUser $request)
     {
         $validate=$request->validated();
         if(Auth::attempt(['email' => $validate['email'], 'password' => $validate['password']])== false)
         {
-            return with('message','error');
+            Session::flash('Error', 'No es correcto');
+            return redirect()->back();
         }
-
-
-        return redirect()->to('/');
+        return redirect()->route('Inicio');
     }
     public function destroy(){
         Auth::logout();
