@@ -48,7 +48,7 @@ class RegisterController extends Controller
         $user =new User;
         $user->name = $validate['nombres']." ".$validate['apellidos'];
         $user->password =  bcrypt($validate['password']);
-        //$user->phone=$validate['numero'];
+        $user->phone=$validate['numero'];
         $user->role = 'USER';
         $user->email = $validate['email'];
         $user->perfil='person.png';

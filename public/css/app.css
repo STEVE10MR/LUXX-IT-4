@@ -11581,3 +11581,73 @@ body {
 .form-text-logo {
   color: white;
 }
+
+.carousel-image {
+  width: 400px;
+  height: 800px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  filter: brightness(50%);
+}
+
+/*Estilos del banner*/
+/*Estilos del banner*/
+.banner {
+  height: calc(100vh - var(--header-height));
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  -webkit-animation: banner 15s infinite linear;
+          animation: banner 15s infinite linear;
+}
+
+.banner-body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  color: #fff;
+  font-family: "poppinsregular";
+  text-align: center;
+}
+
+.text-night {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+}
+
+.container-web-page {
+  margin-top: 100px;
+}
+
+/* estilos cards*/
+.container-cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.container-cards .card {
+  background: #202528;
+  width: 300px;
+  min-width: 300px;
+  margin: 10px 15px;
+  border: 1px solid white;
+}
+
+.container-cards .card:hover {
+  text-decoration: none;
+}
+
+.container-cards .card .card-img-top {
+  height: 300px;
+}
+
+.font-car {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}

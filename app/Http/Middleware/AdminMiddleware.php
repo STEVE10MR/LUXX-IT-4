@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use auth;
+
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
@@ -22,7 +23,7 @@ class AdminMiddleware
             if(auth()->user()->role === "ADMIN"){
                 return $next($request);
             }else{
-                return redirect()->route('inicio');
+                return redirect()->route('Inicio');
             }
         }
         else{

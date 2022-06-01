@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
     public function __construct(){
-        $this->middleware('admin');
+        $this->middleware('admin')->except('create_menu','show');
     }
 
     public function index(Request $request){
@@ -23,12 +25,26 @@ class ProductsController extends Controller
         return view('----',compact('productos','search'));
     }
 
+    public function show(Products $product){
+        return view('product.details',['product'=>$product]);
+    }
+
     public function create(){
         $categorias = DB::table('category')
         ->get();
         return view('----');
     }
+    public function create_menu()
+    {
+        $countProducts = DB::table('products')->count();
 
+        $paginateProducts=ceil($countProducts/12)>0?ceil($countProducts/12):1;
+
+        $products = Products::latest()->paginate($paginateProducts);
+
+        return view('product.menu',compact('products'));
+
+    }
     public function store(Request $request){
         $validator = $request->validate([
             'titulo'=>'required|max:250',

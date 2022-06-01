@@ -23,8 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $galeria = DB::table('galeria')->take('4')->get();
-        $producto = DB::table('products')->paginate(15);
-        return view('home',['galeria'=>$galeria,'producto'=>$producto]);
+
+        return view('home')->with('steve','creator');
     }
+
 }

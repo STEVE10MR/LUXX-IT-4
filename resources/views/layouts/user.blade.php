@@ -25,10 +25,10 @@
     <div id="app">
 
         <div class="collapse show" id="navbarToggleExternalContent" >
-            <div class="bg-logo p-4" style="background-image: url('img/banner_01.png');">
+            <div class="bg-logo p-4" style="background-image:{{URL::asset('asset/banner/banner_01.png')}};">
                 <a class="navbar-brand" href="#">
                     <img
-                    src="img/logo.png"
+                    src="{{URL::asset('asset/logo/logo.png')}}"
                     height="90"
                     alt="Portrait of a Woman"
                     loading="lazy"
@@ -38,10 +38,10 @@
                 <div class="nav justify-content-between">
                     <ul class="nav justify-content-center">
                         <li class="nav-item">
-                            <a class="nav-link active color text_link" aria-current="page" href="#">Inicio</a>
+                            <a class="nav-link active color text_link" aria-current="page" href="{{route('Inicio')}}">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link color text_link" href="#">Menu</a>
+                            <a class="nav-link color text_link" href="{{route('products.create_menu')}}">Menu</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link color text_link" href="#">Galeria</a>
@@ -57,7 +57,7 @@
                         @endguest
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{route('client.open_carrito')}}">
                             <span class="badge badge-pill bg-danger">2</span>
                             <span><i class="fas fa-shopping-cart color"></i></span>
                             </a>
@@ -106,28 +106,28 @@
                 <div class="row">
                     <div class="col-12 col-md-4">
                         <ul class="list-unstyled" >
-                            <li><h5 class="font-weight-bold" ><i class="far fa-copyright"></i> NutriFit</h5></li>
-                            <li> Todos los derechos reservados </li>
+                            <li><h5 class="font-weight-bold form-text-logo" ><i class="far fa-copyright"></i> NutriFit</h5></li>
+                            <li class="form-text-logo"> Todos los derechos reservados </li>
                         </ul>
                     </div>
                     <div class="col-12 col-md-4">
                         <ul class="list-unstyled" >
-                            <li><h5 class="font-weight-bold" >Tacna</h5></li>
-                            <li><i class="fas fa-map-marker-alt fa-fw"></i> Francisco Paula Vigil 1126, Tacna 23001</li>
+                            <li><h5 class="font-weight-bold form-text-logo" >Tacna</h5></li>
+                            <li class="form-text-logo"><i class="fas fa-map-marker-alt fa-fw"></i> Francisco Paula Vigil 1126, Tacna 23001</li>
                         </ul>
                     </div>
                     <div class="col-12 col-md-4">
                         <ul class="list-unstyled" >
-                            <li><h5 class="font-weight-bold" >Siguenos en:</h5> </li>
+                            <li><h5 class="font-weight-bold form-text-logo" >Siguenos en:</h5> </li>
                             <li>
-                                <a href="#" class="footer-link" target="_blank" >
-                                    <i class="fab fa-facebook fa-fw"></i> Facebook
+                                <a href="#" class="footer-link form-text-logo" target="_blank" style="text-decoration: none;">
+                                    <i class="fab fa-facebook fa-fw form-text-logo"></i> Facebook
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="footer-link" target="_blank" >
-                                    <i class="fab fa-youtube fa-fw"></i>
+                                <a href="#" class="footer-link form-text-logo" target="_blank" style="text-decoration: none;">
+                                    <i class="fab fa-youtube fa-fw form-text-logo"></i>
                                         Youtube
                                 </a>
                             </li>

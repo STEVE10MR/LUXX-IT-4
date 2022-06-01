@@ -17,10 +17,10 @@ class Products extends Model
         'descripcion',
         'price',
         'status',
+        'url'
     ];
-
     public function getRouteKeyName()
     {
-        return 'id';
+        return 'url';
     }
 }
