@@ -23,7 +23,7 @@ class productTableSeeder extends Seeder
                     'password'=>bcrypt('admin123'),
                     'email'=>'admin@gmail.com',
                     'perfil'=>'image/avatars/profiles/avatar-1.jpg',
-                    'role'=>'USER',
+                    'role'=>'ADMIN',
                     'phone'=>'999888777'
             ]);
         }

@@ -56,7 +56,7 @@ class RegisterController extends Controller
         $user->phone=$validate['numero'];
         $user->role = 'USER';
         $user->email = $validate['email'];
-        $user->perfil='image/avatars/profiles/avatar-1.png';
+        $user->perfil='image/avatars/profiles/avatar-1.jpg';
         $user->save();
 
 
