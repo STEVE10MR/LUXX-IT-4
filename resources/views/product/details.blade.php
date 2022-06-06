@@ -14,7 +14,7 @@
             <div class="col-12 col-lg-5">
                 <!--cover-->
                 <figure class="full-box">
-                    <img class="img-fluid" src="{{URL::asset("asset/galeria/banner_07.jpg")}}" alt="platillo_">
+                    <img class="img-fluid" src="{{{URL::asset("asset/comidas/$product->portada")}}}" alt="platillo_">
                 </figure>
 
             </div>
@@ -29,14 +29,14 @@
 
                 <p class="lead font-weight-bold form-text-label">Precio: {{$product->price}}</p>
 
-                <!-- Agregar al carrito -->
-                <form action="" style="padding-top: 70px;">
+                <form method="POST" action="{{route('client.add_cart_detail')}}" style="padding-top: 70px;">
+                    @csrf
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-12 col-md-6">
                                 <div class="form-outline mb-4 px-1">
-                                    <input type="text" value="1" class="form-control text-center " id="product_cant" pattern="[0-9]{1,10}" maxlength="10" >
-                                    <label for="product_cant" class="form-label form-text-label">Cantidad</label>
+                                    <input type="text" value="1" class="form-control text-center " id="product_cant" name="product_cant" maxlength="12" required>
+                                    <label for="product_cant" class="form-label form-text-label">Cantidadd</label>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 text-center">
@@ -44,6 +44,7 @@
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" value="{{$product->id}}" name="product_id" id="product_id">
                 </form>
             </div>
         </div>

@@ -4,7 +4,6 @@
 
 @section('content')
 
-
 <hr class="form-text-logo">
 
 <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">

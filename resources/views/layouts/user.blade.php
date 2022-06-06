@@ -70,7 +70,8 @@
                                 id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre
                                 >
                                 <img
-                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"
+                                    src="{{URL::asset("storage/$perfil")}}"
+
                                     class="rounded-circle"
                                     height="22"
                                     alt="Portrait of a Woman"
@@ -79,8 +80,17 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                                    <a class="dropdown-item" href="#">{{ __('Mi perfil') }}</a>
-                                    <a class="dropdown-item" href="#">{{ __('Configuracion') }}</a>
+                                    <a class="dropdown-item" href="{{route('user.profile')}}">{{ __('Mi Perfil') }}</a>
+                                    <a class="dropdown-item" href="#">{{ __('Gestion de la Cuenta') }}</a>
+                                    @if(Auth::user()->role == "ADMIN")
+                                        <a class="dropdown-item" href="#">{{ __('Panel de Administracion') }}</a>
+                                    @endif
+                                    @if(Auth::user()->role == "USER")
+                                        <a class="dropdown-item" href="#">{{ __('Mis Pedidos') }}</a>
+                                        <a class="dropdown-item" href="#">{{ __('Direcciones de Entrega') }}</a>
+                                        <a class="dropdown-item" href="#">{{ __('Tarjetas de Pago') }}</a>
+                                    @endif
+
                                     <a class="dropdown-item" href="{{route('session.destroy')}}">{{ __('Cerrar Sesion') }}</a>
 
                                 </div>

@@ -14,7 +14,6 @@ class SessionsController extends Controller
         $validate=$request->validated();
         if(Auth::attempt(['email' => $validate['email'], 'password' => $validate['password']])== false)
         {
-            Session::flash('Error', 'No es correcto');
             return redirect()->back();
         }
         return redirect()->route('Inicio');

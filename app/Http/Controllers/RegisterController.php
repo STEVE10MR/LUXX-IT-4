@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
+use Illuminate\Support\Facades\Auth;
 
 
 class RegisterController extends Controller
@@ -22,7 +23,11 @@ class RegisterController extends Controller
     }
     public function create()
     {
-        return view('users.register');
+        $countCart=0;
+        if (Auth::check()) {
+            $countCart=DB::table('cart')->where('user_id', '=', Auth::user()->id)->get()->count();
+        }
+        return view('users.register',['countCart'=>$countCart]);
     }
     public function store(SaveFormUser $request)
     {
@@ -51,7 +56,7 @@ class RegisterController extends Controller
         $user->phone=$validate['numero'];
         $user->role = 'USER';
         $user->email = $validate['email'];
-        $user->perfil='person.png';
+        $user->perfil='image/avatars/profiles/avatar-1.png';
         $user->save();
 
 

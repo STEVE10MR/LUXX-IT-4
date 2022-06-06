@@ -11651,3 +11651,28 @@ body {
   font-size: 18px;
   font-weight: bold;
 }
+
+.form-style-text {
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.form-color-black {
+  color: #000;
+}
+
+.color-active:hover {
+  color: #ffffff;
+  background: #202528;
+}
+
+.active_upd {
+  color: #ffffff;
+  background: #202528;
+}
+
+.active_upd:hover {
+  color: #ffffff;
+  background: #202528;
+}

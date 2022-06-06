@@ -77,12 +77,8 @@
         </div>
         @empty
         @endforelse
-        {{$products->links()}}
-
-
-
     </div>
-
+    {{!! $products->appends(request()->query())->links() !!}}
 </div>
 
 @endsection
