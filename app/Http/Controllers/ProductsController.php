@@ -32,11 +32,10 @@ class ProductsController extends Controller
     }
 
     public function show(Products $product){
-        $countCart=0;
-        if (Auth::check()) {
-            $countCart=DB::table('cart')->where('user_id', '=', Auth::user()->id)->get()->count();
-        }
-        return view('product.details',['product'=>$product,'countCart'=>$countCart]);
+        $load=load();
+        $countCart=$load['countCart'];
+        $perfil=$load['perfil'];
+        return view('product.details',['product'=>$product,'countCart'=>$countCart,'perfil'=>$perfil]);
 
         /*
         return Cache::rememberForever('product' . $product->id, function() use ($product) {
@@ -61,10 +60,10 @@ class ProductsController extends Controller
 
         //$paginateProducts=ceil($countProducts/12)>0?ceil($countProducts/12):1;
         //modify -> delivery.test
-        $countCart=0;
-        if (Auth::check()) {
-            $countCart=DB::table('cart')->where('user_id', '=', Auth::user()->id)->get()->count();
-        }
+        $load=load();
+        $countCart=$load['countCart'];
+        $perfil=$load['perfil'];
+
         $key = "products.page.".request('page',1);
 
         $ttl=60;
@@ -72,7 +71,7 @@ class ProductsController extends Controller
             return Products::orderBy('created_at',request('sorted','ASC'))->paginate(8);
         });
 
-        return view('product.menu',compact('products','countCart'));
+        return view('product.menu',compact('products','countCart','perfil'));
 
     }
     public function store(Request $request){
