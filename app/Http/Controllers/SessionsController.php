@@ -14,9 +14,16 @@ class SessionsController extends Controller
         $validate=$request->validated();
         if(Auth::attempt(['email' => $validate['email'], 'password' => $validate['password']])== false)
         {
-            return redirect()->back();
+            return redirect()->to('/');
         }
-        return redirect()->route('Inicio');
+        else
+        {
+            if(!(Auth::user()->role=="ADMIN"))
+            {
+                return redirect()->route('Inicio');
+            }
+            return redirect()->route('admin.panel');
+        }
     }
     public function destroy(){
         Auth::logout();

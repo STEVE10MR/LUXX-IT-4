@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Products;
+use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
 
 class UserController extends Controller
@@ -18,10 +19,8 @@ class UserController extends Controller
     }
 
     public function index(){
-        $user=User::where('role','=','ADMIN')
-        ->orderby('id','desc')
-        ->get();
-        return view('users.show',['users'=>$user]);
+
+        return view('admin.panel');
     }
 
     /**

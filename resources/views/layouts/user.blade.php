@@ -52,19 +52,16 @@
 
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link color text_link btn--show-modal" data-mdb-toggle="modalx" data-mdb-target="#modalx" role="button">{{ __('Hola, Identificate') }}</a>
+                                <a class="nav-link color text_link btn--show-login" data-mdb-toggle="" data-mdb-target="#" role="button">{{ __('Hola, Identificate') }}</a>
                             </li>
                         @endguest
-
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('client.open_carrito')}}">
                             <span class="badge badge-pill bg-danger">{{$countCart}}</span>
                             <span><i class="fas fa-shopping-cart color"></i></span>
                             </a>
                         </li>
-
                         @if(Auth::check())
-
                             <li class="nav-item dropdown">
                                 <a
                                 id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre
@@ -74,7 +71,7 @@
 
                                     class="rounded-circle"
                                     height="22"
-                                    alt="Portrait of a Woman"
+                                    alt="img"
                                     loading="lazy"
                                 />
                                 </a>
@@ -82,13 +79,9 @@
 
                                     <a class="dropdown-item" href="{{route('user.profile')}}">{{ __('Mi Perfil') }}</a>
                                     <a class="dropdown-item" href="#">{{ __('Gestion de la Cuenta') }}</a>
-                                    @if(Auth::user()->role == "ADMIN")
-                                        <a class="dropdown-item" href="#">{{ __('Panel de Administracion') }}</a>
-                                    @endif
                                     @if(Auth::user()->role == "USER")
                                         <a class="dropdown-item" href="#">{{ __('Mis Pedidos') }}</a>
                                         <a class="dropdown-item" href="#">{{ __('Direcciones de Entrega') }}</a>
-                                        <a class="dropdown-item" href="#">{{ __('Tarjetas de Pago') }}</a>
                                     @endif
 
                                     <a class="dropdown-item" href="{{route('session.destroy')}}">{{ __('Cerrar Sesion') }}</a>

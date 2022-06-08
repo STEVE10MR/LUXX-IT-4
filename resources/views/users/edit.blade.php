@@ -4,14 +4,6 @@
 
 <div class="container">
 
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="main-breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item active"aria-current="page">Home</li>
-        <li class="breadcrumb-item active" aria-current="page">User</li>
-        <li class="breadcrumb-item active" aria-current="page">Profile Settings</li>
-      </ol>
-    </nav>
     <!-- /Breadcrumb -->
     <div class="row gutters-sm">
       <div class="col-md-4 d-none d-md-block">
@@ -65,13 +57,13 @@
                 @csrf
                 <div class="form-group">
                   <label for="fullName">Nombre completo</label>
-                  <input type="text" class="form-control" id="fullname" name="fullname" aria-describedby="fullNameHelp" placeholder="Enter your fullname" value="{{$user->name}}">
+                  <input type="text" class="form-control" id="fullname" name="fullname" aria-describedby="fullNameHelp" placeholder="Enter your fullname"  value="{{old('fullname',$user->name)}}">
                   <small id="fullNameHelp" class="form-text text-muted">
                     Su nombre puede aparecer por aquí donde se le menciona. Puede cambiarlo o eliminarlo en cualquier momento.</small>
                 </div>
                 <div class="form-group">
                   <label for="phone">Telefono</label>
-                  <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your website address" value="{{$user->phone}}"">
+                  <input type="text" class="form-control" id="phone" name="phone" value="{{old('phone',$user->phone)}} ">
                 </div>
                 <div class="form-group">
                   <label for="image">Imagen de Perfil</label>
@@ -198,10 +190,7 @@
         </div>
       </div>
     </div>
-
   </div>
-
-
 @endsection
 
 

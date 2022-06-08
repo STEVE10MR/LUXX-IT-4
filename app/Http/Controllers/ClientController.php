@@ -21,7 +21,6 @@ class ClientController extends Controller
     }
     public function load()
     {
-
         return ['count'=>$countCart,'perfil'=>$perfil];
     }
     public function index()
