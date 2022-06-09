@@ -65,7 +65,8 @@
 
         @forelse ($products as $product )
         <div class="card shadow-1-strong">
-            <img class="card-img-top" src="{{URL::asset("asset/comidas/$product->portada")}}" style alt="nombre_platillo">
+
+            <img class="card-img-top" src="{{URL::asset("storage/$product->portada")}}" style alt="nombre_platillo">
             <div class="card-body text-center">
                 <h5 class="card-title font-weight-bold font-car">{{$product->name}}</h5>
                 <p class="card-text lead"><span class="badge bg-secondary">S/.{{$product->price}}</span></p>
@@ -78,7 +79,11 @@
         @empty
         @endforelse
     </div>
-    {{!! $products->appends(request()->query())->links() !!}}
+    <div class="pagination">
+        @if($products)
+            {{!! $products->appends(request()->query())->links('pagination::bootstrap-4') !!}}
+        @endif
+    </div>
 </div>
 
 @endsection

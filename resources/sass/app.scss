@@ -23,6 +23,13 @@ body {
     color: orange;
 }
 
+///@banner
+
+.bg-logo {
+    background-repeat: repeat;
+}
+
+////
 .mov {
     margin-right: 10%;
 }
@@ -316,7 +323,7 @@ body {
 .carousel-image {
     width: 400px;
     height: 800px;
-    object-fit: cover;
+    object-fit: scale-down;
     filter: brightness(50%);
 }
 
@@ -531,8 +538,18 @@ body {
 //edit imgae
 
 .img-edit {
-    width: 250px;
+    width: 50px;
+    height: auto;
+    object-fit: cover;
     height: auto;
     border: 1px solid rgb(255, 255, 255);
     border-radius: 5px;
+    transition: all 0.5s ease 0s;
+}
+
+.img-edit:hover {
+    width: 250px;
+    height: auto;
+    object-fit: cover;
+    transition: all 0.5s ease 0s;
 }

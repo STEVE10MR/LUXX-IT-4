@@ -141,7 +141,7 @@ class ProductsController extends Controller
                 return redirect()->back();
             }
             $ruteImage=$validated['image']->store('image/product/','public');
-            $product = new Products;
+            $product = Products::findorFail($id);
             $product->category_id=$validated['category_id'];
             $arrName=explode(" ",$validated['name']);
             $urlName='';
@@ -165,25 +165,6 @@ class ProductsController extends Controller
             return redirect()->back();
         }
     }
-
-    public function destroy($id){
-        try {
-             $producto = Products::findOrFail($id);
-                try{
-                    unlink(public_path('admin/'.$producto->portada));
-                }
-                catch(\Exception $e){
-                }
-             $producto->destroy($id);
-
-             Session::flash('success', 'Se eliminó el producto correctamente');
-             Cache::flush();
-             return redirect()->back();
-        } catch (\Exception $e) {
-             Session::flash('danger', $e);
-             return redirect()->back();
-        }
-     }
 
     public function update_status($id){
         try {

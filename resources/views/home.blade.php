@@ -11,7 +11,7 @@
     @forelse ($galeria as $value)
         <div class="carousel-inner">
             <div class="carousel-item active">
-            <img src="{{URL::asset("asset/galeria/$value->foto")}}" class="d-block w-100 carousel-image" alt="...">
+            <img src="{{URL::asset("storage/$value->foto")}}" class="d-block w-100 carousel-image banner-image-font" alt="...">
             <div class="carousel-caption d-none d-md-block">
                 <div class="banner">
                     <div class="banner-body">

@@ -18,14 +18,19 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-
+    <style>
+        .bg-logo
+        {
+            background-image: url({{URL::asset("storage/image/banner/banner_02.png")}});
+        }
+    </style>
 
 </head>
 <body>
     <div id="app">
 
         <div class="collapse show" id="navbarToggleExternalContent" >
-            <div class="bg-logo p-4" style="background-image:{{URL::asset('asset/banner/banner_01.png')}};">
+            <div class="bg-logo p-4">
                 <a class="navbar-brand" href="#">
                     <img
                     src="{{URL::asset('asset/logo/logo.png')}}"
