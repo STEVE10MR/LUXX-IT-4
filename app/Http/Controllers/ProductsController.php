@@ -22,7 +22,7 @@ class ProductsController extends Controller
 
     public function index(Request $request){
         $category=Category::select('id','category')->get();
-        $product=Products::join('category', 'category.id', '=', 'products.category_id')->select('category.category','products.id','products.name','products.price','products.status')->orderBy('created_at',request('sorted','ASC'))->paginate(10);
+        $product=Products::join('category', 'category.id', '=', 'products.category_id')->select('category.id as cat_id','category.category','products.id','products.name','products.price','products.status','products.descripcion','products.portada')->orderBy('created_at',request('sorted','ASC'))->paginate(10);
         return view('product.index',['product'=>$product,'category'=>$category]);
 
     }
@@ -34,7 +34,7 @@ class ProductsController extends Controller
         $busqueda=$validated['search'];
         $product=null;
         $category=Category::get();
-        $product=Products::join('category', 'category.id', '=', 'products.category_id')->select('category.category','products.id','products.name','products.price','products.status')->orderBy('created_at',request('sorted','ASC'))->Where('name', 'like', '%' .$busqueda. '%')->paginate(10);
+        $product=Products::join('category', 'category.id', '=', 'products.category_id')->select('category.id as cat_id','category.category','products.id','products.name','products.price','products.status','products.descripcion','products.portada')->orderBy('created_at',request('sorted','ASC'))->Where('name', 'like', '%' .$busqueda. '%')->paginate(10);
         return view('product.index',['product'=>$product,'category'=>$category]);
     }
 
@@ -70,6 +70,7 @@ class ProductsController extends Controller
         if(!$validated)
         {
             Session::flash('success', 'Error al registrar');
+            return redirect()->back();
         }
         $ruteImage=$validated['image']->store('image/product/','public');
         $product = new Products;
@@ -116,52 +117,49 @@ class ProductsController extends Controller
 
     public function edit($id){
 
-        $producto = Alimento::findOrFail($id);
+        return "GAA";
+        $productDetail = Alimento::findOrFail($id);
         $categorias = DB::table('category')
         ->get();
-        return view('productos.edit',compact('categorias','producto'));
+        return view('productos.edit',['productDetail'=>$productDetail]);
     }
 
     public function update(Request $request,$id){
-
-        $validator = $request->validate([
-            'titulo'=>'required|max:250',
-            'descripcion'=>'required|max:300',
-            'precio'=>'required|max:250',
-            'portada'=>'required|max:5000',
+        $validated = $request->validate([
+            'name' => 'required|max:45',
+            'description' => 'required|max:255',
+            'prices'=>'required',
+            'category_id'=>'required',
+            'image'=>'required|max:2048',
         ]);
-
 
         try
         {
-            $producto = Products::findOrFail($id);;
-            $producto->name = $request->get('titulo');
-            $producto->descripcion = $request->get('descripcion');
-            $producto->price = $request->get('precio');
-            $producto->categoria = $request->get('categoria');
-            $producto->status = 'Disponible';
-            if($request->portada){
-
-                $extension2 = $request->portada[0]->extension();
-                try{
-                        unlink(public_path('admin/'.$producto->portada));
-                }
-                catch(\Exception $e){
-                }
-                if($extension2 == 'png' || $extension2 == 'jpeg' || $extension2 == 'jpg' || $extension2 == 'webp'){
-                        $imgname2 = uniqid();
-                        $imageName2 = $imgname2.'.'.$request->portada[0]->extension();
-                        $request->portada[0]->move(public_path('admin'), $imageName2);
-                        $producto->portada = $imageName2;
-                }else{
-                    Session::flash('danger', 'El formato de la imagen no se acepta');
-                    return redirect()->back();
-                }
+            if(!$validated)
+            {
+                Session::flash('success', 'Error al actualizar');
+                return redirect()->back();
             }
-            $producto->update();
-            Session::flash('success', 'Se actualizó con exito el nuevo producto');
-            Cache::flush();
-            return redirect()->route('----');
+            $ruteImage=$validated['image']->store('image/product/','public');
+            $product = new Products;
+            $product->category_id=$validated['category_id'];
+            $arrName=explode(" ",$validated['name']);
+            $urlName='';
+            foreach($arrName as $value)
+            {
+                $urlName.=strtolower($value).'-';
+            }
+            $product->url='product'.'-'.$urlName.'tacna';
+            $product->portada=$ruteImage;
+            $product->name=$validated['name'];
+            $product->descripcion=$validated['description'];
+            $product->price=round(floatval($validated['prices']),2);
+            $product->status=1;
+
+            $product->save();
+
+            Session::flash('success', 'Se actualizo exitosamente');
+            return redirect()->back();
         }catch (\Exception $e) {
             Session::flash('danger', $e);
             return redirect()->back();

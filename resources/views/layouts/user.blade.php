@@ -52,7 +52,7 @@
 
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link color text_link btn--show-login" data-mdb-toggle="" data-mdb-target="#" role="button">{{ __('Hola, Identificate') }}</a>
+                                <a class="nav-link color text_link btn--show-modal login" data-mdb-toggle="" data-mdb-target="#" role="button">{{ __('Hola, Identificate') }}</a>
                             </li>
                         @endguest
                         <li class="nav-item">
@@ -142,14 +142,14 @@
 
 
 
-        <div class="modalx container py-5 h-100 hidden" id="modalx">
+        <div class="modalx container py-5 h-100 hidden login" id="modalx">
             <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card bg-dark text-white" style="border-radius: 1rem;">
                 <div class="card-body p-5 text-center">
 
                     <div class="mb-md-5 mt-md-4 pb-5 form_repeat_l">
-                    <button class="btn--close-modal">&times;</button>
+                    <button class="btn--close-modal login">&times;</button>
                     <h2 class="fw-bold mb-2 text-uppercase">Iniciar Sesion</h2>
                         <br>
                     <form method="POST" action="{{ route('session.store')}}" >

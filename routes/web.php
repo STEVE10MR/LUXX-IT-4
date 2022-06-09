@@ -32,6 +32,7 @@ Route::get('/product', 'App\Http\Controllers\ProductsController@index')->name('p
 Route::get('/product/search', 'App\Http\Controllers\ProductsController@search')->name('product.search');
 Route::post('/product/register', 'App\Http\Controllers\ProductsController@create')->name('product.create');
 Route::get('/product/{id}/status', 'App\Http\Controllers\ProductsController@update_status')->name('product.status');
+Route::post('/product/{id}', 'App\Http\Controllers\ProductsController@update')->name('product.update');
 
 Route::get('logout','App\Http\Controllers\SessionsController@destroy')->name('session.destroy');
 Route::post('login','App\Http\Controllers\SessionsController@store')->name('session.store');
