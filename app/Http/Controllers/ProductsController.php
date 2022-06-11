@@ -21,21 +21,11 @@ class ProductsController extends Controller
     }
 
     public function index(Request $request){
+        $busqueda=$request->get('search')?$request->get('search'):'';
         $category=Category::select('id','category')->get();
-        $product=Products::join('category', 'category.id', '=', 'products.category_id')->select('category.id as cat_id','category.category','products.id','products.name','products.price','products.status','products.descripcion','products.portada')->orderBy('created_at',request('sorted','ASC'))->paginate(10);
-        return view('product.index',['product'=>$product,'category'=>$category]);
-
-    }
-    public function search(Request $request)
-    {
-        $validated = $request->validate([
-            'search'=>'required',
-        ]);
-        $busqueda=$validated['search'];
-        $product=null;
-        $category=Category::get();
         $product=Products::join('category', 'category.id', '=', 'products.category_id')->select('category.id as cat_id','category.category','products.id','products.name','products.price','products.status','products.descripcion','products.portada')->orderBy('created_at',request('sorted','ASC'))->Where('name', 'like', '%' .$busqueda. '%')->paginate(10);
         return view('product.index',['product'=>$product,'category'=>$category]);
+
     }
 
     public function show(Products $product){
@@ -66,6 +56,7 @@ class ProductsController extends Controller
             'category_id'=>'required',
         ]);
 
+        return $validated;
 
         if(!$validated)
         {

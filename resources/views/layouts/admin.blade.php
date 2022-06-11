@@ -35,7 +35,7 @@
                             class="fas fa-chart-line me-2"></i>Análisis</a>
                     <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-paperclip me-2"></i>Reportes</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                    <a href="{{route('user.index')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-shopping-cart me-2"></i>Gestion de Repartidores</a>
                     <a href="{{route('product.index')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-gift me-2"></i>Productos</a>

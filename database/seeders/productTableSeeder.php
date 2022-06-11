@@ -15,15 +15,15 @@ class productTableSeeder extends Seeder
      */
     public function run()
     {
-        for($i=0;$i<1;$i++)
+        for($i=0;$i<35;$i++)
         {
             User::create(
                 [
-                    'name'=>'admin',
-                    'password'=>bcrypt('admin123'),
-                    'email'=>'admin@gmail.com',
+                    'name'=>'repartidor'.$i,
+                    'password'=>bcrypt('123123123'),
+                    'email'=>'repartidor'.$i.'@gmail.com',
                     'perfil'=>'image/avatars/profiles/avatar-1.jpg',
-                    'role'=>'ADMIN',
+                    'role'=>'REPA',
                     'phone'=>'999888777'
             ]);
         }

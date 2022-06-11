@@ -28,11 +28,12 @@ Route::delete('/cart/{id}','App\Http\Controllers\ClientController@cart_destroy')
 
 Route::get('/menu','App\Http\Controllers\ProductsController@create_menu')->name('products.create_menu');
 Route::get('/products/{product}', 'App\Http\Controllers\ProductsController@show')->name('product.show');
-Route::get('/product', 'App\Http\Controllers\ProductsController@index')->name('product.index');
-Route::get('/product/search', 'App\Http\Controllers\ProductsController@search')->name('product.search');
-Route::post('/product/register', 'App\Http\Controllers\ProductsController@create')->name('product.create');
-Route::get('/product/{id}/status', 'App\Http\Controllers\ProductsController@update_status')->name('product.status');
-Route::post('/product/{id}', 'App\Http\Controllers\ProductsController@update')->name('product.update');
+//product -> products
+Route::get('/products', 'App\Http\Controllers\ProductsController@index')->name('product.index');
+Route::get('/products/search', 'App\Http\Controllers\ProductsController@search')->name('product.search');
+Route::post('/products/register', 'App\Http\Controllers\ProductsController@create')->name('product.create');
+Route::get('/products/{id}/status', 'App\Http\Controllers\ProductsController@update_status')->name('product.status');
+Route::post('/products/{id}', 'App\Http\Controllers\ProductsController@update')->name('product.update');
 
 Route::get('logout','App\Http\Controllers\SessionsController@destroy')->name('session.destroy');
 Route::post('login','App\Http\Controllers\SessionsController@store')->name('session.store');
@@ -43,7 +44,14 @@ Route::post('/account/profile/edit','App\Http\Controllers\ClientController@updat
 Route::get('/user/register','App\Http\Controllers\RegisterController@create')->name('register.create');
 Route::post('/user','App\Http\Controllers\RegisterController@store')->name('register.store');
 
-Route::get('/panel','App\Http\Controllers\UserController@index')->name('admin.panel');
+Route::post('/user','App\Http\Controllers\UserController@store')->name('register.store');
+
+Route::get('/panel','App\Http\Controllers\UserController@index_panel')->name('admin.panel');
+
+Route::get('/users','App\Http\Controllers\UserController@index')->name('user.index');
+Route::post('/users/register','App\Http\Controllers\UserController@store')->name('user.create');
+Route::get('/users/{id}/status','App\Http\Controllers\UserController@update_status')->name('user.status');
+Route::post('/users/{id}','App\Http\Controllers\UserController@update')->name('user.update');
 
 //Auth::routes();
 

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -18,11 +19,31 @@ class UserController extends Controller
         $this->middleware('admin');
     }
 
-    public function index(){
-
+    public function index_panel(){
         return view('admin.panel');
     }
+    public function index(Request $request){
+        $busqueda=$request->get('search')?$request->get('search'):'';
+        $user=User::select('id','name', 'email','phone','status','created_at','updated_at')->orderBy('created_at',request('sorted','ASC'))->Where('role','=','REPA')->Where('role','=','REPA')->Where('name', 'like', '%' .$busqueda. '%')->paginate(10);
+        return view('users.index',['user'=>$user]);
+    }
+    public function update_status($id){
+        try {
+            $user = User::findOrFail($id);
+            if($user->status == '1'){
+               $user->status = '0';
+            }else{
+               $user->status = '1';
+            }
+            $user->update();
 
+            Session::flash('success', 'Se actualizó el estado del usuario correctamente');
+            return redirect()->back();
+       } catch (\Exception $e) {
+            Session::flash('danger', $e);
+            return redirect()->back();
+       }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -39,20 +60,34 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(User $user,SaveFormUser $request)
+    public function store(Request $request)
     {
-        $validate=$request->validated();
+        $validated = $request->validate([
+            'name' => 'required|max:45',
+            'surname' => 'required|max:255',
+            'email'=>'required|max:120',
+            'phone' => 'required|min:9|max:9',
+        ]);
 
+        $valueId=User::where('email', '=', $validated['email'])->first();
+        if(isset($valueId))
+        {
+            return redirect()->route('user.index')->with('validatex','Tu email ya existe');
+        }
+
+        $password=generatorPassword($validated['name'],$validated['surname'],$validated['phone']);
+        $fullname=generatorFullname($validated['name'],$validated['surname']);
 
         $user =new User;
-        $user->name = $validate['nombre'];
-        $user->password = bcrypt($validate['password']);
-        $user->role = 'ADMIN';
-        $user->email = $validate['email'];
-        $user->perfil='ad.png';
+        $user->name = $fullname;
+        $user->phone = $validated['phone'];
+        $user->password = bcrypt($password);
+        $user->role = 'REPA';
+        $user->email = $validated['email'];
+        $user->perfil='image/avatars/profiles/avatar-1.jpg';
 
         $user->save();
-        return redirect()->route('home')->with('success','Registro con exito');
+        return redirect()->route('user.index')->with('success','Registro con exito');
     }
     /**
      * Show the form for editing the specified resource.

@@ -1,13 +1,13 @@
 @extends('layouts.admin')
-@section('tittle','Gestion de Productos')
+@section('tittle','Gestion de Repartidores')
 
 @section('content')
 
 <div class="container-fluid px-4">
     <div class="row my-5">
-        <h3 class="fs-4 mb-3 form-text-logo">Productos</h3>
+        <h3 class="fs-4 mb-3 form-text-logo">Repartidores</h3>
         <div class="search-input">
-            <form action="{{route('product.index')}}" method="GET">
+            <form action="{{route('user.index')}}" method="GET">
                 <div class="form-outline">
                     <input type="search" id="search" name="search" class="form-control" placeholder="search" aria-label="Search" />
                 </div>
@@ -29,33 +29,35 @@
                 <thead>
                     <tr>
                         <th scope="col" width="50">#</th>
-                        <th scope="col">Producto</th>
-                        <th scope="col">Categoria</th>
-                        <th scope="col">Precio Unitario</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Telefono</th>
+                        <th scope="col">Creado</th>
+                        <th scope="col">Actualizado</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Editar</th>
-
                     </tr>
                 </thead>
                 <tbody class="link-master deactivate-modal">
-                    @if($product)
-                        @foreach ($product as $value)
+                    @if($user)
+                        @foreach ($user as $value)
                             <tr>
                                 <th scope="row">1</th>
                                 <td>{{$value->name}}</td>
-                                <td>{{$value->category}}</td>
-                                <td>{{$value->price}}</td>
+                                <td>{{$value->email}}</td>
+                                <td>{{$value->phone}}</td>
+                                <td>{{$value->created_at}}</td>
+                                <td>{{$value->updated_at->diffForHumans()}}</td>
                                 <td class="value-product">
                                     @if(($value->status)==1)
-                                        <a class="nav-link nav-color text_link" href="{{route('product.status',$value->id)}}"><i class="fas fa-toggle-on link-status-a"></i></a>
+                                        <a class="nav-link nav-color text_link" href="{{route('user.status',$value->id)}}""><i class="fas fa-toggle-on link-status-a"></i></a>
                                     @else
-                                        <a class="nav-link nav-color text_link" href="{{route('product.status',$value->id)}}"><i class="fas fa-toggle-off link-status-d"></i></a>
+                                        <a class="nav-link nav-color text_link" href="{{route('user.status',$value->id)}}""><i class="fas fa-toggle-off link-status-d"></i></a>
                                     @endif
                                 </td>
                                 <td class="">
-
                                     <a class="nav-link nav-color text_link btn--show-modal edits " data-toggle="modalx" data-target="#modalEdit{{$value->id}}" data-id="{{$value->id}}" role="button"><i class="fas fa-edit link-edit active-modal"></i></a>
-                                    @include('product.modal.edit')
+
                                 </td>
                             </tr>
                         @endforeach
@@ -65,16 +67,13 @@
 
         </div>
         <div class="pagination">
-            @if($product)
-                {{!! $product->appends(request()->query())->links('pagination::bootstrap-4') !!}}
+            @if($user)
+                {{!! $user->appends(request()->query())->links('pagination::bootstrap-4') !!}}
             @endif
         </div>
     </div>
 </div>
-@include('product.modal.create')
+@include('users.modal.create')
 <div class="overlay hidden"></div>
 @endsection
-
-
-
 
