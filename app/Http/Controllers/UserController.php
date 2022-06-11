@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -63,21 +65,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|max:45',
-            'surname' => 'required|max:255',
+            'name' => 'required|min:4|max:45',
+            'surname' => 'required|min:4|max:255',
             'email'=>'required|max:120',
             'phone' => 'required|min:9|max:9',
         ]);
-
         $valueId=User::where('email', '=', $validated['email'])->first();
         if(isset($valueId))
         {
             return redirect()->route('user.index')->with('validatex','Tu email ya existe');
         }
-
+        $time = Carbon::now('America/Lima');
         $password=generatorPassword($validated['name'],$validated['surname'],$validated['phone']);
         $fullname=generatorFullname($validated['name'],$validated['surname']);
-
         $user =new User;
         $user->name = $fullname;
         $user->phone = $validated['phone'];
@@ -85,8 +85,8 @@ class UserController extends Controller
         $user->role = 'REPA';
         $user->email = $validated['email'];
         $user->perfil='image/avatars/profiles/avatar-1.jpg';
-
         $user->save();
+        Storage::disk('public')->put("password/files.txt", $password);
         return redirect()->route('user.index')->with('success','Registro con exito');
     }
     /**
