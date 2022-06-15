@@ -24,7 +24,7 @@
                         <div class="row mb-4 d-flex justify-content-between align-items-center">
                         <div class="col-md-2 col-lg-2 col-xl-2">
                             <img
-                            src="{{URL::asset("asset/comidas/$value->portada")}}"
+                            src="{{URL::asset("storage/$value->portada")}}"
                             class="img-fluid rounded-3">
                         </div>
                         <div class="col-md-3 col-lg-3 col-xl-3">
@@ -62,17 +62,24 @@
                       <h5 class="text-uppercase">SubTotal</h5>
                       <h5>S/. {{$subtotal}}</h5>
                     </div>
-
+                    <hr class="my-4">
+                    <div class="d-flex justify-content-between mb-4">
+                        <h5 class="text-uppercase">Impuesto</h5>
+                        <h5>S/. {{$impuesto}}</h5>
+                    </div>
                     <hr class="my-4">
 
                     <div class="d-flex justify-content-between mb-5">
                       <h5 class="text-uppercase">Total</h5>
                       <h5>S/. {{$total}}</h5>
                     </div>
-
-                    <button type="button" class="btn btn-dark btn-block btn-lg"
-                      data-mdb-ripple-color="dark">Confirmar Orden</button>
-
+                    <form action="{{route('client.generate_order')}}" method="post">
+                        @csrf
+                        <input type="hidden" value="{{$cart}}" name="products">
+                        <input type="hidden" value="{{$user_id}}" name="user_id">
+                        <input type="hidden" value="{{$total}}" name="total">
+                        <button class="btn btn-dark btn-block btn-lg" data-mdb-ripple-color="dark">Pagar</button>
+                    </form>
                   </div>
                 </div>
               </div>

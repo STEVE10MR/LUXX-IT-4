@@ -44,5 +44,20 @@ function generatorFullname($name,$surname)
     }
 
     return $nameCorrect." ".$surnameCorrect;
+}
 
+function stringToArray($data)
+{
+
+    return $data."";
+}
+function arrayToString($data)
+{
+    $productURL="";
+    foreach($data->toArray() as $product)
+    {
+        $productURL.=$product->id."&".$product->producto."&".$product->price."-";
+    }
+    $productURL=substr($productURL,1,(strlen($productURL)-2));
+    return $productURL;
 }

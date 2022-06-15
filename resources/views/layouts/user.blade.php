@@ -81,14 +81,12 @@
                                 />
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-
                                     <a class="dropdown-item" href="{{route('user.profile')}}">{{ __('Mi Perfil') }}</a>
-                                    <a class="dropdown-item" href="#">{{ __('Gestion de la Cuenta') }}</a>
+                                    <a class="dropdown-item" href="{{route('user.management')}}">{{ __('Gestion de la Cuenta') }}</a>
                                     @if(Auth::user()->role == "USER")
-                                        <a class="dropdown-item" href="#">{{ __('Mis Pedidos') }}</a>
-                                        <a class="dropdown-item" href="#">{{ __('Direcciones de Entrega') }}</a>
+                                        <a class="dropdown-item" href="{{route('user.orders')}}">{{ __('Mis Pedidos') }}</a>
+                                        <a class="dropdown-item" href="{{route('user.address')}}">{{ __('Direcciones de Entrega') }}</a>
                                     @endif
-
                                     <a class="dropdown-item" href="{{route('session.destroy')}}">{{ __('Cerrar Sesion') }}</a>
 
                                 </div>

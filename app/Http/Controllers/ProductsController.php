@@ -55,14 +55,6 @@ class ProductsController extends Controller
             'image'=>'required|max:2048',
             'category_id'=>'required',
         ]);
-
-        return $validated;
-
-        if(!$validated)
-        {
-            Session::flash('success', 'Error al registrar');
-            return redirect()->back();
-        }
         $ruteImage=$validated['image']->store('image/product/','public');
         $product = new Products;
         $product->category_id=$validated['category_id'];
@@ -106,14 +98,6 @@ class ProductsController extends Controller
 
     }
 
-    public function edit($id){
-
-        return "GAA";
-        $productDetail = Alimento::findOrFail($id);
-        $categorias = DB::table('category')
-        ->get();
-        return view('productos.edit',['productDetail'=>$productDetail]);
-    }
 
     public function update(Request $request,$id){
         $validated = $request->validate([
@@ -126,11 +110,6 @@ class ProductsController extends Controller
 
         try
         {
-            if(!$validated)
-            {
-                Session::flash('success', 'Error al actualizar');
-                return redirect()->back();
-            }
             $ruteImage=$validated['image']->store('image/product/','public');
             $product = Products::findorFail($id);
             $product->category_id=$validated['category_id'];

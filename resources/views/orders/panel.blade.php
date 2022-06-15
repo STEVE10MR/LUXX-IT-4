@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('tittle','Panel de Administracion')
+@section('tittle','Dashboard')
 
 @section('content')
 
@@ -8,8 +8,8 @@
         <div class="col-md-3">
             <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                 <div>
-                    <h3 class="fs-2">720</h3>
-                    <p class="fs-5">Products</p>
+                    <h3 class="fs-2">{{$countProduct}}</h3>
+                    <p class="fs-5">Productos</p>
                 </div>
                 <i class="fas fa-gift fs-1 primary-text secondary-bg p-3 image-control"></i>
             </div>
@@ -18,7 +18,7 @@
         <div class="col-md-3">
             <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                 <div>
-                    <h3 class="fs-2">S/.4920</h3>
+                    <h3 class="fs-2">S/.{{$sales}}</h3>
                     <p class="fs-5">Sales</p>
                 </div>
                 <i
@@ -29,7 +29,7 @@
         <div class="col-md-3">
             <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                 <div>
-                    <h3 class="fs-2">3899</h3>
+                    <h3 class="fs-2">{{$countDelivery}}</h3>
                     <p class="fs-5">Delivery</p>
                 </div>
                 <i class="fas fa-truck fs-1 primary-text secondary-bg p-3 image-control"></i>
@@ -136,7 +136,6 @@
             </table>
         </div>
     </div>
-
 </div>
 @endsection
 

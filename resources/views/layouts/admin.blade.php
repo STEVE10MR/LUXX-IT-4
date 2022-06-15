@@ -29,7 +29,7 @@
                 <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
                         class="fas fa-user-secret me-2"></i>ADMIN</div>
                 <div class="list-group list-group-flush my-3">
-                    <a href="#" class="list-group-item list-group-item-action bg-transparent second-text active"><i
+                    <a href="{{route('order.panel')}}" class="list-group-item list-group-item-action bg-transparent second-text active"><i
                             class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-chart-line me-2"></i>Análisis</a>
@@ -39,6 +39,8 @@
                             class="fas fa-shopping-cart me-2"></i>Gestion de Repartidores</a>
                     <a href="{{route('product.index')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-gift me-2"></i>Productos</a>
+                    <a href="{{route('categories.index')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                            class="fas fa-cookie-bite me-2"></i>Categorias</a>
                     <a href="{{route('session.destroy')}}" class="list-group-item list-group-item-action bg-transparent text-danger fw-bold"><i
                             class="fas fa-power-off me-2"></i>Cerrar Sesion</a>
                 </div>

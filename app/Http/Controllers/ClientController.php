@@ -72,23 +72,6 @@ class ClientController extends Controller
     }
 
 
-    /*
-
-    function add_cart(Products $product){
-
-        $time = Carbon::now('America/Lima');
-        $cart = new Cart;
-        $cart->product_id=$product->id;
-        $cart->user_id=Auth::user()->id;
-        $cart->producto=$product->name;
-        $cart->quantity=1;
-        $cart->price=$product->price;
-        $cart->create=$time->format('Y-m-d');
-        $cart->save();
-        Session::flash('success', 'Se agregó al carrito exitosamente');
-        return redirect()->back();
-    }
-    */
 
     function add_cart_detail(Request $request){
 
@@ -142,9 +125,7 @@ class ClientController extends Controller
         $load=load();
         $countCart=$load['countCart'];
         $perfil=$load['perfil'];
-
-        //$cart=Cart::whereRaw('user_id = ?',[Auth::user()->id])->get();
-
+        $iduser=Auth::user()->id;
         $cart=DB::table('cart')->join('products', 'products.id', '=', 'cart.product_id')
         ->select('products.portada','cart.producto', 'cart.quantity', 'cart.price','cart.id')
         ->whereRaw('user_id = ?',[Auth::user()->id])
@@ -155,8 +136,9 @@ class ClientController extends Controller
         {
             $subtotal+=$value->price;
         }
-        $total=$subtotal+$subtotal*0.18;
-        return view('product.cart',['countCart'=>$countCart,'cart'=>$cart,'subtotal'=>$subtotal,'total'=>$total,'perfil'=>$perfil]);
+        $impuesto=$subtotal*0.18;
+        $total=$subtotal+$impuesto;
+        return view('product.cart',['countCart'=>$countCart,'cart'=>$cart,'subtotal'=>$subtotal,'total'=>$total,'perfil'=>$perfil,'user_id'=>$iduser,'impuesto'=>$impuesto]);
     }
 
     function cart_destroy($id){
@@ -172,39 +154,19 @@ class ClientController extends Controller
         }
         return redirect()->back();
     }
-    function edit_profile()
-    {
-        //refactorizar @2
+
+    function generar_pedido(Request $request){
         $load=load();
         $countCart=$load['countCart'];
         $perfil=$load['perfil'];
-
-        $user=User::find(Auth::user()->id);
-        return view('users.edit',['countCart'=>$countCart,'user'=>$user,'perfil'=>$perfil]);
-    }
-    function update_profile(Request $request)
-    {
-        $user=User::find(Auth::user()->id);
-
         $validated = $request->validate([
-            'fullname'=>'required|min:10|max:255',
-            'phone' => 'required|min:9|max:9',
-            'image'=>['required','image']
+            'products'=>'required',
+            'user_id' => 'required',
+            'total' => 'required',
         ]);
+        $productsJson=array_values(json_decode($validated['products'], true));
 
-        if($user && $validated)
-        {
-            $user->perfil=$ruteImage=$validated['image']->store('image/avatars/profiles','public');
-            $user->name=$validated['fullname'];
-            $user->phone=$validated['phone'];
-            Session::flash('success', 'Se actualizo con exitosamente');
-            $user->save();
-        }
-        else
-        {
-            Session::flash('success', 'Error al actualizar');
-        }
-        return redirect()->back();
+
+        return view('product.checkout',['countCart'=>$countCart,'perfil'=>$perfil,'products'=>$productsJson,'user_id'=>$validated['user_id'],'total'=>$validated['total']]);
     }
-
 }

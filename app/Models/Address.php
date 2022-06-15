@@ -9,9 +9,10 @@ class Address extends Model
 {
     protected $table = "address";
     protected $primaryKey = "id";
-    public $timestamps = true;
+    public $timestamps = false;
     protected $fillable=[
-        'refence',
+        'user_id',
+        'reference',
         'latitude',
         'longitude',
     ];

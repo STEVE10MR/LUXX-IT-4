@@ -22,7 +22,7 @@ class SessionsController extends Controller
             {
                 return redirect()->route('Inicio');
             }
-            return redirect()->route('admin.panel');
+            return redirect()->route('order.panel');
         }
     }
     public function destroy(){

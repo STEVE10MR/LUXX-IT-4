@@ -11864,3 +11864,15 @@ body {
      object-fit: cover;
   transition: all 0.5s ease 0s;
 }
+
+.mod-button {
+  border: 1px solid #fff;
+}
+
+.checkout {
+  background: #fff;
+}
+
+.lh-condensed {
+  line-height: 1.25;
+}

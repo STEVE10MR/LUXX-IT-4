@@ -1,11 +1,11 @@
 @extends('layouts.admin')
-@section('tittle','Gestion de Repartidores')
+@section('tittle','Categorias')
 
 @section('content')
 
 <div class="container-fluid px-4">
     <div class="row my-5">
-        <h3 class="fs-4 mb-3 form-text-logo">Repartidores</h3>
+        <h3 class="fs-4 mb-3 form-text-logo">Categorias</h3>
         <div class="search-input">
             <form action="{{route('user.index')}}" method="GET">
                 <div class="form-outline">
@@ -30,50 +30,42 @@
                     <tr>
                         <th scope="col" width="50">#</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Telefono</th>
-                        <th scope="col">Creado</th>
-                        <th scope="col">Actualizado</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Restablecer contraseña</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
                     </tr>
                 </thead>
                 <tbody class="link-master deactivate-modal">
-                    @if($user)
-                        @foreach ($user as $value)
+                    @if($categories)
+                        @foreach ($categories as $value)
                             <tr>
                                 <th scope="row">1</th>
-                                <td>{{$value->name}}</td>
-                                <td>{{$value->email}}</td>
-                                <td>{{$value->phone}}</td>
-                                <td>{{$value->created_at}}</td>
-                                <td>{{$value->updated_at->diffForHumans()}}</td>
+                                <td>{{$value->category}}</td>
+                                <td>{{$value->description}}</td>
                                 <td class="value-product">
-                                    @if(($value->status)==1)
-                                        <a class="nav-link nav-color text_link" href="{{route('user.status',$value->id)}}""><i class="fas fa-toggle-on link-status-a"></i></a>
-                                    @else
-                                        <a class="nav-link nav-color text_link" href="{{route('user.status',$value->id)}}""><i class="fas fa-toggle-off link-status-d"></i></a>
-                                    @endif
+                                    <a class="nav-link nav-color text_link btn--show-modal edits" data-toggle="modalx" data-target="#modalEdit{{$value->id}}" data-id="{{$value->id}}" role="button"><i class="fas fa-edit link-edit active-modal"></i></a>
+                                    @include('categories.modal.edit')
                                 </td>
                                 <td class="">
-                                    <a class="nav-link nav-color text_link btn--show-modal edits" data-toggle="modalx" data-target="#modalEdit{{$value->id}}" data-id="{{$value->id}}" role="button"><i class="fa fa-key active-modal" aria-hidden="true"></i></a>
-                                    @include('users.modal.edit')
+                                    <form action="{{route('categories.destroy',$value->id)}}" method="POST">
+                                        @csrf @method('DELETE')
+                                        <button class="mod-button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
                     @endif
                 </tbody>
             </table>
-
         </div>
         <div class="pagination">
-            @if($user)
-                {{!! $user->appends(request()->query())->links('pagination::bootstrap-4') !!}}
+            @if($categories)
+                {{!! $categories->appends(request()->query())->links('pagination::bootstrap-4') !!}}
             @endif
         </div>
     </div>
 </div>
-@include('users.modal.create')
+@include('categories.modal.create')
 <div class="overlay hidden"></div>
 @endsection
 
