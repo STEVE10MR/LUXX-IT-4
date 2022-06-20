@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Culqi\Culqi;
 use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Orders;
+use App\Models\Address;
 use App\Models\Products;
 use Illuminate\Http\Request;
+use App\Models\OrdersDetails;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+
 
 
 class ClientController extends Controller
@@ -155,7 +160,7 @@ class ClientController extends Controller
         return redirect()->back();
     }
 
-    function generar_pedido(Request $request){
+    function create_pedido(Request $request){
         $load=load();
         $countCart=$load['countCart'];
         $perfil=$load['perfil'];
@@ -165,8 +170,62 @@ class ClientController extends Controller
             'total' => 'required',
         ]);
         $productsJson=array_values(json_decode($validated['products'], true));
+        $address=Address::select('reference','id')->where('user_id','=',''.$validated['user_id'].'')->get();
+        return view('product.checkout',['countCart'=>$countCart,'perfil'=>$perfil,'products'=>$productsJson,'user_id'=>$validated['user_id'],'total'=>$validated['total'],'address'=>$address?$address:null]);
+    }
+    function generar_pedido($products,$user_id,$total,$token,$address_id,$method){
 
 
-        return view('product.checkout',['countCart'=>$countCart,'perfil'=>$perfil,'products'=>$productsJson,'user_id'=>$validated['user_id'],'total'=>$validated['total']]);
+            if($method == 'culqi'){
+                try {
+                    //PRODUCCION
+                    $SECRET_KEY = "sk_test_zBWxHYk3Jv7k4cRm";
+                    /*
+                    $culqi = new Culqi\Culqi(array('api_key' => $SECRET_KEY));
+
+                    $charge = $culqi->Charges->create(
+                        array(
+                        "amount" => round($total).'00',
+                        "capture" => true,
+                        "currency_code" => 'PEN',
+                        "description" => 'NUTRIFIT',
+                        "email" => "test@culqi.com",
+                        "source_id" => $token
+                        )
+                    );
+                    */
+                }catch(\Exception $e){
+                    Session::flash('danger', 'Se rechazó la tarjera de crédito, intente con otra.');
+                    return redirect()->route('Inicio');
+                }
+            }
+
+            $order = new Orders;
+            $order->client_id=$user_id;
+            $order->address_id=$address_id;
+            $order->status='En espera';
+            $order->recept='----';
+            $order->amount=$total;
+            $order->pay_type=$method;
+            $order->save();
+
+            $cont=0;
+            $cart = Cart::where('user_id','=',$user_id)->get();
+            foreach(json_decode($products,true) as $product)
+            {
+
+                $orderdetail= new OrdersDetails;
+                $orderdetail->order_id= 1;
+                $orderdetail->product_id=$product['id'];
+                $orderdetail->quantity=intval($product['quantity']);
+                $orderdetail->price=floatval($product['price']);
+                $orderdetail->save();
+
+                $carDel=Cart::findOrFail($cart[$cont]->id);
+                $carDel->delete();
+                $cont = $cont+1;
+            }
+            Session::flash('succes', 'Se registro correctamente su orden');
+            return redirect()->route('Inicio');
     }
 }

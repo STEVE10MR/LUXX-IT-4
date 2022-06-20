@@ -9,8 +9,10 @@ class OrdersDetails extends Model
 {
     protected $table = "ordersdetails";
     protected $primaryKey = "id";
-    public $timestamps = true;
+    public $timestamps = false;
     protected $fillable=[
+        'order_id',
+        'product_id',
         'quantity',
         'price',
     ];

@@ -25,7 +25,8 @@ Route::get('/cart','App\Http\Controllers\ClientController@open_cart')->name('cli
 Route::get('/cart/{product}','App\Http\Controllers\ClientController@add_cart')->name('client.add_cart');
 Route::post('/cart','App\Http\Controllers\ClientController@add_cart_detail')->name('client.add_cart_detail');
 Route::delete('/cart/{id}','App\Http\Controllers\ClientController@cart_destroy')->name('client.cart_destroy');
-Route::post('/cart/checkout','App\Http\Controllers\ClientController@generar_pedido')->name('client.generate_order');
+Route::post('/cart/checkout','App\Http\Controllers\ClientController@create_pedido')->name('client.generate_order');
+Route::get('/cart/checkout/{product}/{user_id}/{total}/{token}/{address_id}/{metod}','App\Http\Controllers\ClientController@generar_pedido')->name('client.confirm_order');
 
 Route::get('/menu','App\Http\Controllers\ProductsController@create_menu')->name('products.create_menu');
 Route::get('/products/{product}', 'App\Http\Controllers\ProductsController@show')->name('product.show');

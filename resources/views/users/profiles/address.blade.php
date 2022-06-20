@@ -71,36 +71,92 @@
 <script>
 
 
+        const apikey="AIzaSyA9aA829ZCM_piMFiVSdCRlP5eHjid-EHY";
         const search=document.querySelector('.search');
         const locationMarker=document.getElementById('location');
         const latitudeMarker=document.getElementById('latitude');
         const longitudeMarker=document.getElementById('longitude');
+        const reference=document.getElementById('reference');
         const image ="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-        const map = new google.maps.Map(document.getElementById('map_canvas'), {
-            zoom: 14,
-            center: new google.maps.LatLng(-18.0025255,-70.2437015),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
-        let markeUser=new google.maps.Marker({
-            position: { lat: -18.0025255, lng: -70.2437015 },
-            map:map,
-        });
-
-        map.addListener("click", (e) => {
-            markeUser.setMap(null);
-            placeMarkerAndPanTo(e.latLng, map);
-        });
-        function placeMarkerAndPanTo(latLng, map) {
-            markeUser=new google.maps.Marker({position: latLng,map: map,});
-            map.panTo(latLng);
-            latitudeMarker.value=markeUser.getPosition().lat();
-            longitudeMarker.value=markeUser.getPosition().lng();
-        }
-        search.addEventListener('keydown',function()
+        console.log(reference);
+        class App
         {
-            console.log('search');
-        })
+            #map;
+            #markeUser;
+            #geocode;
 
+            constructor() {
+                this._getPosition();
+            }
+            _getPosition() {
+                if (navigator.geolocation){
+                    navigator.geolocation.getCurrentPosition(
+                        this._loadMap.bind(this),this._loadMapN.bind(this));
+                }
+            }
+            _loadMap(position) {
+                const { latitude } = position.coords;
+                const { longitude } = position.coords;
+                this.#map = new google.maps.Map(document.getElementById('map_canvas'), {
+                    zoom: 14,
+                    center: new google.maps.LatLng(latitude,longitude),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                this.#geocode=new google.maps.Geocoder();
+                this._markerMap(latitude,longitude);
+                this._placeMarkerEvent();
+            }
+            _loadMapN() {
+                alert('No se pudo obtener su ubicacion');
+                this.#map = new google.maps.Map(document.getElementById('map_canvas'), {
+                    zoom: 14,
+                    center: new google.maps.LatLng(-18.0025255,-70.2437015),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                this._markerMap();
+                this._placeMarkerEvent();
+            }
+            _markerMap(latidude=-18.0025255,longitude=-70.2437015)
+            {
+                this.#markeUser=new google.maps.Marker({
+                    position: { lat:latidude, lng:longitude },
+                    map:this.#map,
+                });
+            }
+            _placeMarkerEvent() {
+                this.#map.addListener("click", (e) => {
+                    this.#markeUser.setMap(null);
+                    this._placeMarkerAndPanTo(e.latLng);
+                    //////////////////////////////
+                });
+            }
+            _placeMarkerAndPanTo(latLng) {
+                this.#markeUser=new google.maps.Marker({position: latLng,map: this.#map,});
+                this.#map.panTo(latLng);
+                latitudeMarker.value=this.#markeUser.getPosition().lat();
+                longitudeMarker.value=this.#markeUser.getPosition().lng();
+                /////////////////////////////////
+                this._coordsToAddress(this.#markeUser.getPosition().lat(),this.#markeUser.getPosition().lng());
 
+            }
+            _coordsToAddress(latidude=-18.0025255,longitude=-70.2437015)
+            {
+                const url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+ latidude + "," + longitude +"&key=" + apikey;
+                $.ajax({url: url})
+                      .done(function(data){
+                            if(data.status === "OK")
+                            {
+                                reference.value=data.results[0].formatted_address;
+                                console.log(data.results[0].formatted_address);
+                            }
+                            else
+                            {
+                                alert('Error');
+                            }
+
+                });
+            }
+        }
+        const app=new App();
 </script>
 @endsection

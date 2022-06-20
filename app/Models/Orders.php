@@ -11,9 +11,11 @@ class Orders extends Model
     protected $primaryKey = "id";
     public $timestamps = true;
     protected $fillable=[
-        'latitude',
-        'longitude',
+        'client_id',
+        'delivery_id',
+        'address_id',
         'status',
+        'recept',
         'amount',
         'pay_type',
     ];

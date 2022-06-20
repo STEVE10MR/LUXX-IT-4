@@ -201,5 +201,8 @@
         </div>
         <div class="overlay hidden"></div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://checkout.culqi.com/js/v3"></script>
+    @stack('scripts')
 </body>
 </html>
