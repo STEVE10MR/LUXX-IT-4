@@ -39,11 +39,18 @@ Route::post('/products/{id}', 'App\Http\Controllers\ProductsController@update')-
 
 Route::get('logout','App\Http\Controllers\SessionsController@destroy')->name('session.destroy');
 Route::post('login','App\Http\Controllers\SessionsController@store')->name('session.store');
+Route::get('/register/verify/{token}','App\Http\Controllers\SessionsController@verification')->name('session.verification');
+
+
+Route::get('/user/recovery','App\Http\Controllers\ResetPasswordController@create')->name('session.recovery');
+Route::post('/user/recovery','App\Http\Controllers\ResetPasswordController@store')->name('session.recovery_verification');
+Route::get('/user/password/{token}','App\Http\Controllers\ResetPasswordController@edit')->name('session.edit_password');
+Route::post('/user/password/','App\Http\Controllers\ResetPasswordController@update')->name('session.update_password');
 
 Route::get('/user/register','App\Http\Controllers\RegisterController@create')->name('register.create');
-Route::post('/user','App\Http\Controllers\RegisterController@store')->name('register.store');
+Route::post('/user','App\Http\Controllers\RegisterController@store')->name('register.store_client');
 
-Route::post('/user','App\Http\Controllers\UserController@store')->name('register.store');
+Route::post('/panel/user','App\Http\Controllers\UserController@store')->name('register.store');
 
 Route::get('/panel','App\Http\Controllers\OrdersController@index')->name('order.panel');
 

@@ -215,7 +215,7 @@ class ClientController extends Controller
             {
 
                 $orderdetail= new OrdersDetails;
-                $orderdetail->order_id= 1;
+                $orderdetail->order_id= $order->id;
                 $orderdetail->product_id=$product['id'];
                 $orderdetail->quantity=intval($product['quantity']);
                 $orderdetail->price=floatval($product['price']);

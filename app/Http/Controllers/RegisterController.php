@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Mail\Verification;
+use App\Models\Email_verify;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 
 class RegisterController extends Controller
@@ -50,6 +53,7 @@ class RegisterController extends Controller
         }
 
 
+
         $user =new User;
         $user->name = $validate['nombres']." ".$validate['apellidos'];
         $user->password =  bcrypt($validate['password']);
@@ -57,9 +61,26 @@ class RegisterController extends Controller
         $user->role = 'USER';
         $user->email = $validate['email'];
         $user->perfil='image/avatars/profiles/avatar-1.jpg';
+
         $user->save();
 
 
+        $token=quickRandom(100);
+        $receivers = $validate['email'];
+
+        $emailVerify=Email_verify::where('email','=',$validate['email'])->first();
+        if($emailVerify)
+        {
+            return redirect()->route('home')->with('success','Registro con exito');
+        }
+        else
+        {
+            $emailVerify=new Email_verify;
+            $emailVerify->email=$receivers;
+            $emailVerify->token=$token;
+            $emailVerify->save();
+        }
+        Mail::to($receivers)->send(new Verification($token));
         return redirect()->route('home')->with('success','Registro con exito');
 
 

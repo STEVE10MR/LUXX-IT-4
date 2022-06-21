@@ -15,7 +15,7 @@
     <hr>
     <div class="row">
         <div class="col-12">
-            <form class="div-bordered" method="POST" action="{{route('register.store')}}" style="padding: 15px;">
+            <form class="div-bordered" method="POST" action="{{route('register.store_client')}}" style="padding: 15px;">
                 @csrf
                 <fieldset>
                     <legend class="form-text-h2"><i class="far fa-address-card form-text-logo"></i> &nbsp; Información personal</legend>

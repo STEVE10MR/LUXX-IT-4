@@ -61,3 +61,9 @@ function arrayToString($data)
     $productURL=substr($productURL,1,(strlen($productURL)-2));
     return $productURL;
 }
+function quickRandom($length = 16)
+{
+    $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
+}

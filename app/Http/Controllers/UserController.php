@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Mail\Password;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
@@ -63,6 +64,8 @@ class UserController extends Controller
         $user->email = $validated['email'];
         $user->perfil='image/avatars/profiles/avatar-1.jpg';
         $user->save();
+        $receivers = $validate['email'];
+        Mail::to($receivers)->send(new Password($password));
         Storage::disk('public')->put("password/files.txt", $password);
         return redirect()->route('user.index')->with('success','Registro con exito');
     }

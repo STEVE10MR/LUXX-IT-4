@@ -1,41 +1,47 @@
 @extends('users.profiles.index')
 @section('tab-pane')
-<div class="tab-pane active" id="security">
-    <h6>SECURITY SETTINGS</h6>
-    <hr>
-    <form>
-      <div class="form-group">
-        <label class="d-block">Change Password</label>
-        <input type="text" class="form-control" placeholder="Enter your old password">
-        <input type="text" class="form-control mt-1" placeholder="New password">
-        <input type="text" class="form-control mt-1" placeholder="Confirm new password">
-      </div>
-    </form>
-    <hr>
-    <form>
-      <div class="form-group">
-        <label class="d-block">Two Factor Authentication</label>
-        <button class="btn btn-info" type="button">Enable two-factor authentication</button>
-        <p class="small text-muted mt-2">Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</p>
-      </div>
-    </form>
-    <hr>
-    <form>
-      <div class="form-group mb-0">
-        <label class="d-block">Sessions</label>
-        <p class="font-size-sm text-secondary">This is a list of devices that have logged into your account. Revoke any sessions that you do not recognize.</p>
-        <ul class="list-group list-group-sm">
-          <li class="list-group-item has-icon">
-            <div>
-              <h6 class="mb-0">San Francisco City 190.24.335.55</h6>
-              <small class="text-muted">Your current session seen in United States</small>
-            </div>
-            <button class="btn btn-light btn-sm ml-auto" type="button">More info</button>
-          </li>
-        </ul>
-      </div>
-    </form>
+<h6>
+    MIS PEDIDOS</h6>
+  <hr>
+<div class="col">
+    <table class="table bg-white rounded shadow-sm  table-hover">
+        <thead>
+            <tr>
+                <th scope="col" width="10">#</th>
+                <th scope="col">Productos</th>
+                <th scope="col">Direccion</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Tipo de pago</th>
+            </tr>
+        </thead>
+        <tbody class="link-master deactivate-modal">
+            @if($orders)
+                @foreach ($orders as $value)
+                    <tr>
+                        <th scope="row">{{'#'}}</th>
+                        <td>
+                            @forelse($resumeProducts[$value->id] as $data)
+                                {{$data['name']}}
+                            @empty
+                                {{'Sin productos'}}
+                            @endforelse
+                        </td>
+                        <td>{{$value->status}}</td>
+                        <td>{{$value->reference}}</td>
+                        <td>{{$value->amount}}</td>
+                        <td>{{$value->pay_type}}</td>
+                    </tr>
+                @endforeach
+            @endif
+        </tbody>
+        <tbody class="link-master deactivate-modal">
+
+        </tbody>
+    </table>
 </div>
+
+<br>
 
 @endsection
 

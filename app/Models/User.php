@@ -21,6 +21,7 @@ class User extends Authenticatable
         'email',
         'perfil',
         'phone',
+
     ];
     protected $guarded=[
 
@@ -29,7 +30,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at'
     ];
     public function getRouteKeyName()
     {
