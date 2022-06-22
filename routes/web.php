@@ -19,6 +19,9 @@ DB::listen(function($query)
 });
 */
 
+
+Route::get('firebase','App\Http\Controllers\FirebaseController@index');
+
 Route::get('/','App\Http\Controllers\ClientController@index')->name('Inicio');
 
 Route::get('/cart','App\Http\Controllers\ClientController@open_cart')->name('client.open_carrito');
@@ -28,14 +31,17 @@ Route::delete('/cart/{id}','App\Http\Controllers\ClientController@cart_destroy')
 Route::post('/cart/checkout','App\Http\Controllers\ClientController@create_pedido')->name('client.generate_order');
 Route::get('/cart/checkout/{product}/{user_id}/{total}/{token}/{address_id}/{metod}','App\Http\Controllers\ClientController@generar_pedido')->name('client.confirm_order');
 
+
 Route::get('/menu','App\Http\Controllers\ProductsController@create_menu')->name('products.create_menu');
 Route::get('/products/{product}', 'App\Http\Controllers\ProductsController@show')->name('product.show');
 //product -> products
+
 Route::get('/products', 'App\Http\Controllers\ProductsController@index')->name('product.index');
 Route::get('/products/search', 'App\Http\Controllers\ProductsController@search')->name('product.search');
 Route::post('/products/register', 'App\Http\Controllers\ProductsController@create')->name('product.create');
 Route::get('/products/{id}/status', 'App\Http\Controllers\ProductsController@update_status')->name('product.status');
 Route::post('/products/{id}', 'App\Http\Controllers\ProductsController@update')->name('product.update');
+
 
 Route::get('logout','App\Http\Controllers\SessionsController@destroy')->name('session.destroy');
 Route::post('login','App\Http\Controllers\SessionsController@store')->name('session.store');
@@ -47,11 +53,13 @@ Route::post('/user/recovery','App\Http\Controllers\ResetPasswordController@store
 Route::get('/user/password/{token}','App\Http\Controllers\ResetPasswordController@edit')->name('session.edit_password');
 Route::post('/user/password/','App\Http\Controllers\ResetPasswordController@update')->name('session.update_password');
 
+
 Route::get('/user/register','App\Http\Controllers\RegisterController@create')->name('register.create');
 Route::post('/user','App\Http\Controllers\RegisterController@store')->name('register.store_client');
 
 Route::post('/panel/user','App\Http\Controllers\UserController@store')->name('register.store');
 
+Route::get('/statistics','App\Http\Controllers\OrdersController@statistics')->name('statistics');
 Route::get('/panel','App\Http\Controllers\OrdersController@index')->name('order.panel');
 
 Route::get('/users','App\Http\Controllers\UserController@index')->name('user.index');

@@ -9,6 +9,7 @@ use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -64,7 +65,7 @@ class UserController extends Controller
         $user->email = $validated['email'];
         $user->perfil='image/avatars/profiles/avatar-1.jpg';
         $user->save();
-        $receivers = $validate['email'];
+        $receivers = $validated['email'];
         Mail::to($receivers)->send(new Password($password));
         Storage::disk('public')->put("password/files.txt", $password);
         return redirect()->route('user.index')->with('success','Registro con exito');
@@ -85,6 +86,8 @@ class UserController extends Controller
         $password=generatorPassword($fullname,'update',$phone).$time->format('Y').$time->format('m').$time->format('d');
         $user->password = bcrypt($password);
         $user->save();
+        $receivers = $user->email;
+        Mail::to($receivers)->send(new Password($password));
         Storage::disk('public')->put("password/file.txt", $password);
         return redirect()->route('user.index')->with('success','Contraseña restablecida');
     }

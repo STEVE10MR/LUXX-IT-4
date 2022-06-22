@@ -31,10 +31,8 @@
                 <div class="list-group list-group-flush my-3">
                     <a href="{{route('order.panel')}}" class="list-group-item list-group-item-action bg-transparent second-text active"><i
                             class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                    <a href="{{route('statistics')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-chart-line me-2"></i>Análisis</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
-                            class="fas fa-paperclip me-2"></i>Reportes</a>
                     <a href="{{route('user.index')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-shopping-cart me-2"></i>Gestion de Repartidores</a>
                     <a href="{{route('product.index')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i

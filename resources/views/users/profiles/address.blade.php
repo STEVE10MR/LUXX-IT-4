@@ -78,7 +78,7 @@
         const longitudeMarker=document.getElementById('longitude');
         const reference=document.getElementById('reference');
         const image ="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-        console.log(reference);
+
         class App
         {
             #map;

@@ -11,9 +11,6 @@
               <a href="{{route('user.profile')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">
                 Informacion de Perfil
               </a>
-              <a href="{{route('user.management')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">
-                Gestion de la Cuenta
-              </a>
               <a href="{{route('user.orders')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">
                 Mis Pedidos
               </a>
