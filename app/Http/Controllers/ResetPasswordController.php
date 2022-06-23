@@ -35,7 +35,7 @@ class ResetPasswordController extends Controller
         $emailVerify->save();
 
         Mail::to($receivers)->send(new Password_resets($token));
-        return redirect()->route('home')->with('success','Registro con exito');
+        return redirect()->route('Inicio')->with('success','Se cambio la contraseña correctamente');
     }
     function edit($token)
     {

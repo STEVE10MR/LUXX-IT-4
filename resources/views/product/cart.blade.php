@@ -78,7 +78,7 @@
                         <input type="hidden" value="{{$cart}}" name="products">
                         <input type="hidden" value="{{$user_id}}" name="user_id">
                         <input type="hidden" value="{{$total}}" name="total">
-                        <button class="btn btn-dark btn-block btn-lg" data-mdb-ripple-color="dark">Pagar</button>
+                        <button class="btn btn-dark btn-block btn-lg procButton" id="procButton" data-mdb-ripple-color="dark" disabled>Pagar</button>
                     </form>
                   </div>
                 </div>
@@ -89,5 +89,18 @@
       </div>
     </div>
 </section>
+<script>
+    const countCar=parseInt(document.querySelector('.countcart').textContent);
+    const elementCart=document.getElementById('procButton');
 
+    if(countCar>0)
+    {
+        elementCart.disabled=false;
+    }
+    else
+    {
+        elementCart.disabled=true;
+    }
+
+</script>
 @endsection

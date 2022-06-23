@@ -22,14 +22,14 @@
                         <th scope="row">{{'#'}}</th>
                         <td>
                             @forelse($resumeProducts[$value->id] as $data)
-                                {{$data['name']}}
+                                <p>- {{$data['name']}}</p>
                             @empty
-                                {{'Sin productos'}}
+                                <p>{{'Sin productos'}}</p>
                             @endforelse
                         </td>
-                        <td>{{$value->status}}</td>
                         <td>{{$value->reference}}</td>
                         <td>{{$value->amount}}</td>
+                        <td>{{$value->status}}</td>
                         <td>{{$value->pay_type}}</td>
                     </tr>
                 @endforeach

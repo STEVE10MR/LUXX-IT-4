@@ -38,13 +38,11 @@
                         <label><b>Direccion</b></label>
                         <hr>
                         <select id="direccion" name="direccion" class="form-select col-lg-8" required>
-                            <option value=""></option>
+                            <option selected disabled>Elija una Direccion</option>
                             @forelse ($address as $data)
                                 <option value="{{$data->id}}">{{$data->reference}}</option>
                             @empty
-                            <option value=""><a href="{{route('user.address')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">
-                                Porfavor agrege un direccion
-                              </a></option>
+                                <option selected disabled>Agrege una Direccion</option>
                             @endforelse
 
                         </select>
@@ -64,8 +62,10 @@
 
 @push('scripts')
     <script>
+
         const direccion=document.getElementById('direccion');
         const buttonCheckout=document.getElementById('buyButton');
+        
         direccion.addEventListener('change',function(e)
         {
             if(this.value)
@@ -97,7 +97,8 @@
                 let user_id  = '<?= $user_id ?>';
                 let total = '<?= floatval($total) ?>';
                 let address_id = direccion.value;
-                console.log('Se envio');
+
+                alert('Se envio');
                 return window.location="../cart/checkout/"+products+"/"+user_id+"/"+total+"/"+token+"/"+address_id+'/culqi';
             }
             else {

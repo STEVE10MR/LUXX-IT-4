@@ -14,7 +14,7 @@
             <div class="col-12 col-lg-5">
                 <!--cover-->
                 <figure class="full-box">
-                    <img class="img-fluid" src="{{{URL::asset("asset/comidas/$product->portada")}}}" alt="platillo_">
+                    <img class="img-fluid" src="{{URL::asset("storage/$product->portada")}}" alt="platillo_">
                 </figure>
 
             </div>

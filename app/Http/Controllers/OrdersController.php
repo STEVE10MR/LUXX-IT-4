@@ -69,17 +69,18 @@ class OrdersController extends Controller
         $load=load();
         $countCart=$load['countCart'];
         $perfil=$load['perfil'];
+
         $orders=DB::table('orders')
         ->select('orders.id','reference','status','amount','pay_type','created_at','updated_at')
         ->orderBy('created_at',request('sorted','ASC'))
         ->join('address','address.id','=','orders.address_id')
         ->where('client_id','=',Auth::user()->id)
         ->get();
-
         $resumeProducts=array();
-
+        //return $orders;
         foreach($orders as $order)
         {
+
             $orderDetails=DB::table('ordersdetails')
             ->select('name')
             ->join('products','products.id','=','ordersdetails.product_id')
@@ -88,7 +89,6 @@ class OrdersController extends Controller
             $resumeProducts[$order->id]=json_decode($orderDetails,true);
 
         }
-
 
         return view('users.profiles.orders',['countCart'=>$countCart,'perfil'=>$perfil,'orders'=>$orders,'resumeProducts'=>$resumeProducts]);
     }
@@ -135,7 +135,7 @@ class OrdersController extends Controller
             array_push($dataMount,$amount_totals[$i]);
             array_push($dataMonth,$months[$i]);
         }
-    
+
         return view('orders.statistics',['dataMount'=>$dataMount,'dataMonth'=>$dataMonth]);
     }
 }

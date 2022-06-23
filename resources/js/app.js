@@ -1,3 +1,5 @@
+const { type } = require("jquery");
+
 require("./bootstrap");
 
 ("use strict");
@@ -92,124 +94,31 @@ btnsCloseModal.forEach(function (item) {
     });
 });
 
-linkMaster.addEventListener("click", function (e) {
-    const element = e.target;
+if (linkMaster) {
+    linkMaster.addEventListener("click", function (e) {
+        const element = e.target;
 
-    if (!element.classList.contains("active-modal")) return;
-    const id = element.parentNode.dataset.id;
-    const modalEditId = document.getElementById("modalEdit" + id);
-    modalEditId.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-});
-
-btnCloseEdit.addEventListener("click", function (e) {
-    const elementClose = e.target;
-    if (!elementClose.classList.contains("modal-close")) return;
-    const id = elementClose.dataset.id;
-    const modalEditId = document.getElementById("modalEdit" + id);
-    modalEditId.classList.add("hidden");
-    overlay.classList.add("hidden");
-});
-/*
-btnCloseBurbujeEdit.addEventListener("click", function (e) {
-    e.preventDefault();
-    console.log(e.target);
-
-    modalEditId.classList.add("hidden");
-    overlay.classList.add("hidden");
-
-});
-
-/*
-btnsCloseModal.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    modal.forEach(function (modal) {
-        if (
-            modal.classList.contains("login") ===
-            e.currentTarget.classList.contains("login")
-        ) {
-            modal.classList.add("hidden");
-            overlay.classList.add("hidden");
-        }
+        if (!element.classList.contains("active-modal")) return;
+        const id = element.parentNode.dataset.id;
+        const modalEditId = document.getElementById("modalEdit" + id);
+        modalEditId.classList.remove("hidden");
+        overlay.classList.remove("hidden");
     });
-});
-//
-*/
-/*
-// Modal window
+}
 
-btnsOpenModalLogin.addEventListener("click", function (e) {
-    modal.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-    console.log("Edit open");
-});
+if (btnCloseEdit) {
+    btnCloseEdit.addEventListener("click", function (e) {
+        const elementClose = e.target;
+        if (!elementClose.classList.contains("modal-close")) return;
+        const id = elementClose.dataset.id;
+        const modalEditId = document.getElementById("modalEdit" + id);
+        modalEditId.classList.add("hidden");
+        overlay.classList.add("hidden");
+    });
+}
 
-btnCloseModal.addEventListener("click", function (e) {
-    e.preventDefault();
-    modal.classList.add("hidden");
-    overlay.classList.add("hidden");
-    console.log("Edit open");
-});
-
-////
-
-////
-
-btnsOpenModalEdit.addEventListener("click", function (e) {
-    e.preventDefault();
-    modalEdit.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-});
-
-btnsCloseModalEdit.addEventListener("click", function (e) {
-    e.preventDefault();
-    modalEdit.classList.add("hidden");
-    overlay.classList.add("hidden");
-});
-
-btnsOpenModalRegister.addEventListener("click", function (e) {
-    e.preventDefault();
-    modalRegister.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-});
-
-btnCloseModalRegister.addEventListener("click", function (e) {
-    e.preventDefault();
-    modalRegister.classList.add("hidden");
-    overlay.classList.add("hidden");
-    console.log("Prueba R");
-});
-
-
-const openModal = function (e) {
-    e.preventDefault();
-    modal.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-    console.log("Edit open");
-};
-const closeModal = function (e) {
-    e.preventDefault();
-    modal.classList.add("hidden");
-    overlay.classList.add("hidden");
-    console.log("Edit open");
-};
-
-
-//btnCloseModal.addEventListener("click", closeModal);
-*/
-
-// close all
-/*
-toggler.addEventListener("click", function (e) {
-    e.preventDefault();
-    perfilContenido.classList.remove("show");
-});
-*/
-
-//
-toggleButton.onclick = function () {
-    el.classList.toggle("toggled");
-};
-
-// URL
+if (toggleButton) {
+    toggleButton.onclick = function () {
+        el.classList.toggle("toggled");
+    };
+}

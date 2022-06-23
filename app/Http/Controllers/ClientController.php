@@ -132,7 +132,7 @@ class ClientController extends Controller
         $perfil=$load['perfil'];
         $iduser=Auth::user()->id;
         $cart=DB::table('cart')->join('products', 'products.id', '=', 'cart.product_id')
-        ->select('products.portada','cart.producto', 'cart.quantity', 'cart.price','cart.id')
+        ->select('products.portada','cart.producto', 'cart.quantity', 'cart.price','cart.id','products.id as product_id')
         ->whereRaw('user_id = ?',[Auth::user()->id])
         ->get();
 
@@ -169,9 +169,18 @@ class ClientController extends Controller
             'user_id' => 'required',
             'total' => 'required',
         ]);
-        $productsJson=array_values(json_decode($validated['products'], true));
+        $producDeleteImage=array();
+        foreach(array_values(json_decode($validated['products'],true)) as $product)
+        {
+            $productModel =new Products;
+            $productModel->producto= $product['producto'];
+            $productModel->quantity=$product['quantity'];
+            $productModel->price=$product['price'];
+            $productModel->id=$product['product_id'];
+            array_push($producDeleteImage,$productModel);
+        }
         $address=Address::select('reference','id')->where('user_id','=',''.$validated['user_id'].'')->get();
-        return view('product.checkout',['countCart'=>$countCart,'perfil'=>$perfil,'products'=>$productsJson,'user_id'=>$validated['user_id'],'total'=>$validated['total'],'address'=>$address?$address:null]);
+        return view('product.checkout',['countCart'=>$countCart,'perfil'=>$perfil,'products'=>$producDeleteImage,'user_id'=>$validated['user_id'],'total'=>$validated['total'],'address'=>$address]);
     }
     function generar_pedido($products,$user_id,$total,$token,$address_id,$method){
 
@@ -213,7 +222,6 @@ class ClientController extends Controller
             $cart = Cart::where('user_id','=',$user_id)->get();
             foreach(json_decode($products,true) as $product)
             {
-
                 $orderdetail= new OrdersDetails;
                 $orderdetail->order_id= $order->id;
                 $orderdetail->product_id=$product['id'];

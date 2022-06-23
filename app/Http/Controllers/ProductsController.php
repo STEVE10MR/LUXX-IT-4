@@ -48,53 +48,91 @@ class ProductsController extends Controller
     function create(Request $request)
     {
 
-        $validated = $request->validate([
-            'name' => 'required|max:45',
-            'description' => 'required|max:255',
-            'prices'=>'required',
-            'image'=>'required|max:2048',
-            'category_id'=>'required',
-        ]);
-        $ruteImage=$validated['image']->store('image/product/','public');
-        $product = new Products;
-        $product->category_id=$validated['category_id'];
-        $arrName=explode(" ",$validated['name']);
-        $urlName='';
-        foreach($arrName as $value)
+        try
         {
-            $urlName.=strtolower($value).'-';
+            $validated = $request->validate([
+                'name' => 'required|max:45',
+                'description' => 'required|max:255',
+                'prices'=>'required',
+                'image'=>'required|max:2048',
+                'category_id'=>'required',
+            ]);
+            $ruteImage=$validated['image']->store('image/product','public');
+            $product = new Products;
+            $product->category_id=$validated['category_id'];
+            $arrName=explode(" ",$validated['name']);
+            $urlName='';
+            foreach($arrName as $value)
+            {
+                $urlName.=strtolower($value).'-';
+            }
+            $product->url='product'.'-'.$urlName.'tacna';
+            $product->portada=$ruteImage;
+            $product->name=$validated['name'];
+            $product->descripcion=$validated['description'];
+            $product->price=round(floatval($validated['prices']),2);
+            $product->status=1;
+
+            $product->save();
+
+            Session::flash('success', 'Se registro con exitosamente');
+            return redirect()->back();
+
         }
-        $product->url='product'.'-'.$urlName.'tacna';
-        $product->portada=$ruteImage;
-        $product->name=$validated['name'];
-        $product->descripcion=$validated['description'];
-        $product->price=round(floatval($validated['prices']),2);
-        $product->status=1;
-
-        $product->save();
-
-        Session::flash('success', 'Se registro con exitosamente');
-        return redirect()->back();
+        catch (\Exception $e) {
+            Session::flash('danger', $e);
+            return redirect()->back();
+        }
     }
 
-    public function create_menu()
+    public function create_menu(Request $request)
     {
-        //$countProducts = DB::table('products')->count();
-
-        //$paginateProducts=ceil($countProducts/12)>0?ceil($countProducts/12):1;
-        //modify -> delivery.test
         $load=load();
         $countCart=$load['countCart'];
         $perfil=$load['perfil'];
+        $busqueda=$request->get('search')?$request->get('search'):'';
+        $order=$request->get('order')?$request->get('order'):'';
+        $cat=$request->get('category')?$request->get('category'):'';
 
+        $category=Category::select('id','category')->get();
+
+        $searchOrder="";
+        $type="";
+
+        if($order >=1 && $order<=2)
+        {
+            $searchOrder="name";
+            if($order == 1) $type="asc";
+            else $type="desc";
+        }
+        elseif($order >=3 && $order<=4)
+        {
+            $searchOrder="price";
+            if($order == 3) $type="asc";
+            else $type="desc";
+        }
+        else
+        {
+            $searchOrder="name";
+            $type="asc";
+        }
+
+        $products=Products::join('category', 'category.id', '=', 'products.category_id')->orderBy($searchOrder,$type)->Where('name', 'like', '%' .$busqueda. '%')->whereBetween('category_id',[$cat?$cat:1,$cat?$cat:1000])->paginate(10);
+        $results=count($products);
+        $resultsSearch=$busqueda;
+
+
+        /*
         $key = "products.page.".request('page',1);
 
         $ttl=60;
         $products=Cache::remember($key, $ttl, function () {
             return Products::orderBy('created_at',request('sorted','ASC'))->paginate(8);
         });
+        */
 
-        return view('product.menu',compact('products','countCart','perfil'));
+
+        return view('product.menu',compact('products','countCart','perfil','category','results','resultsSearch','order','cat'));
 
     }
 
