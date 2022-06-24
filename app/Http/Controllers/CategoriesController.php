@@ -20,47 +20,43 @@ class CategoriesController extends Controller
 
     }
     public function store(Request $request){
-        $validated = $request->validate([
-            'category' => 'required|min:4|max:45',
-            'description' => 'required|min:4|max:120',
-        ]);
-        $category=new Category;
-        $category->category=$validated['category'];
-        $category->description=$validated['description'];
-        $category->save();
-        Session::flash('success', 'Se registro con exitosamente');
-        return redirect()->back();
 
-
-    }
-    public function update(Request $request,$id){
-        $validated = $request->validate([
-            'category' => 'required|min:4|max:45',
-            'description' => 'required|min:4|max:120',
-        ]);
-        $category=Category::findOrFail($id);
-        try
-        {
+        try {
+            $validated = $request->validate([
+                'category' => 'required|min:4|max:45',
+                'description' => 'required|min:4|max:120',
+            ]);
+            $category=new Category;
             $category->category=$validated['category'];
             $category->description=$validated['description'];
             $category->save();
-            Session::flash('success', 'Se actualizo exitosamente');
-            return redirect()->back();
+            return redirect()->back()->with('success', 'Se agrego la categoria');
         }catch (\Exception $e) {
-            Session::flash('danger', 'Hubo un problema inesperado al actualizar');
-            return redirect()->back();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+    public function update(Request $request,$id){
+        try {
+            $validated = $request->validate([
+                'category' => 'required|min:4|max:45',
+                'description' => 'required|min:4|max:120',
+            ]);
+            $category=Category::findOrFail($id);
+            $category->category=$validated['category'];
+            $category->description=$validated['description'];
+            $category->save();
+            return redirect()->back()->with('success', 'Se actualizo la categoria');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
     public function destroy($id){
-        $category=Category::findOrFail($id);
-        try
-        {
+        try {
+            $category=Category::findOrFail($id);
             $category->delete();
-            Session::flash('success', 'Se elimino exitosamente');
-            return redirect()->back();
+            return redirect()->back()->with('success', 'Se elimino la categoria');
         }catch (\Exception $e) {
-            Session::flash('danger', 'Hubo un problema inesperado al eliminar');
-            return redirect()->back();
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 }

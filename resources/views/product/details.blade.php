@@ -36,7 +36,7 @@
                             <div class="col-12 col-md-6">
                                 <div class="form-outline mb-4 px-1">
                                     <input type="text" value="1" class="form-control text-center " id="product_cant" name="product_cant" maxlength="12" required>
-                                    <label for="product_cant" class="form-label form-text-label">Cantidadd</label>
+                                    <label for="product_cant" class="form-label form-text-label">Cantidad</label>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 text-center">

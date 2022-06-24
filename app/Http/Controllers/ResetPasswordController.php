@@ -16,26 +16,26 @@ class ResetPasswordController extends Controller
     }
     function store(Request $request)
     {
-        $validated = $request->validate([
-            'email'=>'required',
-        ]);
-        $token=quickRandom(100);
-        $receivers = $validated['email'];
+        try {
+            $validated = $request->validate([
+                'email'=>'required',
+            ]);
+            $token=quickRandom(100);
+            $receivers = $validated['email'];
+            $emailUser=User::where('email','=',$receivers)->where('is_email_verified','=','1')->first();
+            
 
-        $emailUser=User::where('email','=',$receivers)->first();
+            $emailVerify=new Passwordresets;
+            $emailVerify->email=$receivers;
+            $emailVerify->token=$token;
+            $emailVerify->save();
 
-        if(!$emailUser)
-        {
-            return redirect()->route('session.recovery')->with('error','El gmail ingresado no existe');
+            Mail::to($emailUser->email)->send(new Password_resets($token));
+
+            return redirect()->route('Inicio')->with('success','Revise su correo electronico para continuar con el proceso de cambio');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        $emailVerify=new Passwordresets;
-        $emailVerify->email=$receivers;
-        $emailVerify->token=$token;
-        $emailVerify->save();
-
-        Mail::to($receivers)->send(new Password_resets($token));
-        return redirect()->route('Inicio')->with('success','Se cambio la contraseña correctamente');
     }
     function edit($token)
     {
@@ -43,28 +43,32 @@ class ResetPasswordController extends Controller
     }
     function update(Request $request)
     {
-        $validated = $request->validate([
-            'password'=>'required',
-            'password_r'=>'required',
-            'token_pass'=>'required',
-        ]);
+        try {
+            $validated = $request->validate([
+                'password'=>'required',
+                'password_r'=>'required',
+                'token_pass'=>'required',
+            ]);
 
-        $token=$validated['token_pass'];
-        if(!($validated['password'] == $validated['password_r']))
-        {
-            return redirect()->back()->with('error','Tu contraseña no es coincide');
+            $token=$validated['token_pass'];
+            if(!($validated['password'] == $validated['password_r']))
+            {
+                return redirect()->back()->with('error','Tu contraseña no es coincide');
+            }
+
+            $passwordVerify=Passwordresets::where('token','=',$token)->first();
+
+            if(!$passwordVerify) return redirect()->back()->with('error','No existe la token');
+
+            $email=$passwordVerify->email;
+            $password=$validated['password'];
+
+            $user=User::where('email','=',$email)->first();
+            $user->password=bcrypt($password);
+            $user->save();
+            return redirect()->route('Inicio')->with('success','Se cambio la contraseña correctamente');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        $passwordVerify=Passwordresets::where('token','=',$token)->first();
-
-        if(!$passwordVerify) return redirect()->back()->with('error','No existe la cuenta');
-
-        $email=$passwordVerify->email;
-        $password=$validated['password'];
-
-        $user=User::where('email','=',$email)->first();
-        $user->password=bcrypt($password);
-        $user->save();
-        return redirect()->route('Inicio')->with('success','Se cambio la contraseña correctamente');
     }
 }

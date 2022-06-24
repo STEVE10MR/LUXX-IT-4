@@ -38,92 +38,94 @@ class ClientController extends Controller
         return view('home',['galeria'=>$galeria,'countCart'=>$countCart,'perfil'=>$perfil]);
     }
     function add_cart(Products $product){
-        //refactorizar @1
-        $cart=Cart::whereRaw('product_id = ? and user_id = ?', [$product->id,Auth::user()->id])->first();
+        try {
+            $cart=Cart::whereRaw('product_id = ? and user_id = ?', [$product->id,Auth::user()->id])->first();
+            $cartQuantity=isset($cart->quantity)?$cart->quantity:0;
+            $productCant=1;
+            $cartVerify=(($cartQuantity+$productCant)>10)?10:($cartQuantity+$productCant);
 
-        $cartQuantity=isset($cart->quantity)?$cart->quantity:0;
-        $productCant=1;
-        $cartVerify=(($cartQuantity+$productCant)>10)?10:($cartQuantity+$productCant);
 
+            $time = Carbon::now('America/Lima');
 
-        $time = Carbon::now('America/Lima');
-
-        if($cart)
-        {
-            $priceUnit=round(($cart->price/$cart->quantity),2);
-            if(10 == $cartVerify)
+            if($cart)
             {
-                $cartDiference=10-$cart->quantity;
-                $cart->price+=$priceUnit*$cartDiference;
+                $priceUnit=round(($cart->price/$cart->quantity),2);
+                if(10 == $cartVerify)
+                {
+                    $cartDiference=10-$cart->quantity;
+                    $cart->price+=$priceUnit*$cartDiference;
+                }
+                elseif($cartVerify<=10)
+                {
+                    $cart->price+=$priceUnit*$productCant;
+                }
             }
-            elseif($cartVerify<=10)
+            else
             {
-                $cart->price+=$priceUnit*$productCant;
+                $cart = new Cart;
+                $cart->product_id=$product->id;
+                $cart->user_id=Auth::user()->id;
+                $cart->producto=$product->name;
+                $cart->price+=($product->price)*($productCant);
             }
+            $cart->quantity=$cartVerify;
+            $cart->create=$time->format('Y-m-d');
+            $cart->save();
+            return redirect()->back()->with('success', "Se agrego al carrito el producto $product->name");
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-        else
-        {
-            $cart = new Cart;
-            $cart->product_id=$product->id;
-            $cart->user_id=Auth::user()->id;
-            $cart->producto=$product->name;
-            $cart->price+=($product->price)*($productCant);
-        }
-        $cart->quantity=$cartVerify;
-        $cart->create=$time->format('Y-m-d');
-        $cart->save();
-        Session::flash('success', 'Se agregó al carrito exitosamente');
-        return redirect()->back();
     }
 
 
 
     function add_cart_detail(Request $request){
+        try {
+            $validated = $request->validate([
+                'product_id'=>'required',
+                'product_cant' => 'required|numeric|min:1|max:10',
+            ]);
 
-        //return $request;
-        $validated = $request->validate([
-            'product_id'=>'required',
-            'product_cant' => 'required|numeric|min:1|max:10',
-        ]);
+            //refactorizar @1
+            $cart=Cart::whereRaw('product_id = ? and user_id = ?', [$validated['product_id'],Auth::user()->id])->first();
 
-        //refactorizar @1
-        $cart=Cart::whereRaw('product_id = ? and user_id = ?', [$validated['product_id'],Auth::user()->id])->first();
+            $cartQuantity=isset($cart->quantity)?$cart->quantity:0;
+            $productCant=intval($validated['product_cant']);
 
-        $cartQuantity=isset($cart->quantity)?$cart->quantity:0;
-        $productCant=intval($validated['product_cant']);
-
-        $cartVerify=(($cartQuantity+$productCant)>10)?10:($cartQuantity+$productCant);
+            $cartVerify=(($cartQuantity+$productCant)>=10)?10:($cartQuantity+$productCant);
 
 
-        $time = Carbon::now('America/Lima');
+            $time = Carbon::now('America/Lima');
 
-        if($cart)
-        {
-            $priceUnit=round(($cart->price/$cart->quantity),2);
-            if(10 == $cartVerify)
+            if($cart)
             {
-                $cartDiference=10-$cart->quantity;
-                $cart->price+=$priceUnit*$cartDiference;
+                $priceUnit=round(($cart->price/$cart->quantity),2);
+                if(10 == $cartVerify)
+                {
+                    $cartDiference=10-$cart->quantity;
+                    $cart->price+=$priceUnit*$cartDiference;
+                }
+                elseif($cartVerify<=10)
+                {
+                    $cart->price+=$priceUnit*$productCant;
+                }
             }
-            elseif($cartVerify<=10)
+            else
             {
-                $cart->price+=$priceUnit*$productCant;
+                $product=Products::findOrFail($validated['product_id']);
+                $cart = new Cart;
+                $cart->product_id=$product->id;
+                $cart->user_id=Auth::user()->id;
+                $cart->producto=$product->name;
+                $cart->price+=($product->price)*($productCant);
             }
+            $cart->quantity=$cartVerify;
+            $cart->create=$time->format('Y-m-d');
+            $cart->save();
+            return redirect()->back()->with('success', "Se agrego al carrito el producto");
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-        else
-        {
-            $product=Products::findOrFail($validated['product_id']);
-            $cart = new Cart;
-            $cart->product_id=$product->id;
-            $cart->user_id=Auth::user()->id;
-            $cart->producto=$product->name;
-            $cart->price+=($product->price)*($productCant);
-        }
-        $cart->quantity=$cartVerify;
-        $cart->create=$time->format('Y-m-d');
-        $cart->save();
-        Session::flash('success', 'Se agregó al carrito exitosamente');
-        return redirect()->back();
     }
     function open_cart(){
         //refactorizar @2
@@ -147,17 +149,13 @@ class ClientController extends Controller
     }
 
     function cart_destroy($id){
-        $cart = Cart::find($id);
-        if($cart)
-        {
+        try {
+            $cart = Cart::find($id);
             $cart->destroy($id);
-            Session::flash('success', 'Se elimino el producto del carrito exitosamente');
+            return redirect()->back()->with('success', 'Se elimino el producto del carrito exitosamente');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-        else
-        {
-            Session::flash('success', 'Error al eliminar');
-        }
-        return redirect()->back();
     }
 
     function create_pedido(Request $request){
@@ -179,12 +177,13 @@ class ClientController extends Controller
             $productModel->id=$product['product_id'];
             array_push($producDeleteImage,$productModel);
         }
+
         $address=Address::select('reference','id')->where('user_id','=',''.$validated['user_id'].'')->get();
         return view('product.checkout',['countCart'=>$countCart,'perfil'=>$perfil,'products'=>$producDeleteImage,'user_id'=>$validated['user_id'],'total'=>$validated['total'],'address'=>$address]);
     }
     function generar_pedido($products,$user_id,$total,$token,$address_id,$method){
 
-
+        try {
             if($method == 'culqi'){
                 try {
                     //PRODUCCION
@@ -204,8 +203,7 @@ class ClientController extends Controller
                     );
                     */
                 }catch(\Exception $e){
-                    Session::flash('danger', 'Se rechazó la tarjera de crédito, intente con otra.');
-                    return redirect()->route('Inicio');
+                    return redirect()->route('Inicio')->with('error', 'Se rechazó la tarjera de crédito, intente con otra.');
                 }
             }
 
@@ -233,7 +231,9 @@ class ClientController extends Controller
                 $carDel->delete();
                 $cont = $cont+1;
             }
-            Session::flash('succes', 'Se registro correctamente su orden');
-            return redirect()->route('Inicio');
+            return redirect()->route('Inicio')->with('success', 'Se registro correctamente su orden');
+        }catch (\Exception $e) {
+            return redirect()->route('Inicio')->with('error', $e->getMessage());
+        }
     }
 }

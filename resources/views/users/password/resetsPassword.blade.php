@@ -74,6 +74,12 @@
             </div>
             </div>
         </div>
+        @if (session('success'))
+            @include('modal_subject.success')
+        @elseif (session('error'))
+            @include('modal_subject.error')
+        @endif
+        <div class="overlay hidden"></div>
     </div>
 </body>
 </html>

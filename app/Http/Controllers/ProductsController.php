@@ -72,16 +72,13 @@ class ProductsController extends Controller
             $product->descripcion=$validated['description'];
             $product->price=round(floatval($validated['prices']),2);
             $product->status=1;
-
             $product->save();
 
-            Session::flash('success', 'Se registro con exitosamente');
-            return redirect()->back();
+            return redirect()->back()->with('success', 'Se agrego el producto');
 
         }
         catch (\Exception $e) {
-            Session::flash('danger', $e);
-            return redirect()->back();
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -138,16 +135,17 @@ class ProductsController extends Controller
 
 
     public function update(Request $request,$id){
-        $validated = $request->validate([
-            'name' => 'required|max:45',
-            'description' => 'required|max:255',
-            'prices'=>'required',
-            'category_id'=>'required',
-            'image'=>'required|max:2048',
-        ]);
 
         try
         {
+            $validated = $request->validate([
+                'name' => 'required|max:45',
+                'description' => 'required|max:255',
+                'prices'=>'required',
+                'category_id'=>'required',
+                'image'=>'required|max:2048',
+            ]);
+
             $ruteImage=$validated['image']->store('image/product/','public');
             $product = Products::findorFail($id);
             $product->category_id=$validated['category_id'];
@@ -166,17 +164,18 @@ class ProductsController extends Controller
 
             $product->save();
 
-            Session::flash('success', 'Se actualizo exitosamente');
-            return redirect()->back();
-        }catch (\Exception $e) {
-            Session::flash('danger', $e);
-            return redirect()->back();
+            return redirect()->back()->with('success', 'Se agrego el producto');
+
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
     public function update_status($id){
-        try {
-             $product = Products::findOrFail($id);
+        try
+        {
+            $product = Products::findOrFail($id);
              if($product->status == '1'){
                 $product->status = '0';
              }else{
@@ -184,11 +183,11 @@ class ProductsController extends Controller
              }
              $product->update();
 
-             Session::flash('success', 'Se actualizó el estado del producto correctamente');
-             return redirect()->back();
-        } catch (\Exception $e) {
-             Session::flash('danger', $e);
-             return redirect()->back();
+            return redirect()->back()->with('success', 'Se actualizó el estado del producto correctamente');
+
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 

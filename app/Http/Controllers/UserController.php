@@ -33,63 +33,66 @@ class UserController extends Controller
                $user->status = '1';
             }
             $user->update();
-
-            Session::flash('success', 'Se actualizó el estado del usuario correctamente');
-            return redirect()->back();
-       } catch (\Exception $e) {
-            Session::flash('danger', $e);
-            return redirect()->back();
-       }
+            return redirect()->back()->with('success', 'Se actualizó el estado del usuario correctamente');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|min:4|max:45',
-            'surname' => 'required|min:4|max:255',
-            'email'=>'required|max:120',
-            'phone' => 'required|min:9|max:9',
-        ]);
-        $valueId=User::where('email', '=', $validated['email'])->first();
-        if(isset($valueId))
-        {
-            return redirect()->route('user.index')->with('validatex','Tu email ya existe');
+        try {
+            $validated = $request->validate([
+                'name' => 'required|min:4|max:45',
+                'surname' => 'required|min:4|max:255',
+                'email'=>'required|max:120',
+                'phone' => 'required|min:9|max:9',
+            ]);
+            $valueId=User::where('email', '=', $validated['email'])->first();
+            if(isset($valueId))
+            {
+                return redirect()->route('user.index')->with('error','Tu email ya existe');
+            }
+            $time = Carbon::now('America/Lima');
+            $password=generatorPassword($validated['name'],$validated['surname'],$validated['phone']);
+            $fullname=generatorFullname($validated['name'],$validated['surname']);
+            $user =new User;
+            $user->name = $fullname;
+            $user->phone = $validated['phone'];
+            $user->password = bcrypt($password);
+            $user->role = 'REPA';
+            $user->email = $validated['email'];
+            $user->perfil='image/avatars/profiles/avatar-1.jpg';
+            $user->save();
+            $receivers = $validated['email'];
+            Mail::to($receivers)->send(new Password($password));
+            return redirect()->route('user.index')->with('success', 'Registro con exito');
+        }catch (\Exception $e) {
+            return redirect()->route('user.index')->with('error', $e->getMessage());
         }
-        $time = Carbon::now('America/Lima');
-        $password=generatorPassword($validated['name'],$validated['surname'],$validated['phone']);
-        $fullname=generatorFullname($validated['name'],$validated['surname']);
-        $user =new User;
-        $user->name = $fullname;
-        $user->phone = $validated['phone'];
-        $user->password = bcrypt($password);
-        $user->role = 'REPA';
-        $user->email = $validated['email'];
-        $user->perfil='image/avatars/profiles/avatar-1.jpg';
-        $user->save();
-        $receivers = $validated['email'];
-        Mail::to($receivers)->send(new Password($password));
-        Storage::disk('public')->put("password/files.txt", $password);
-        return redirect()->route('user.index')->with('success','Registro con exito');
     }
     public function reset_password(Request $request)
     {
-        $validated = $request->validate([
-            'delete' => 'required',
-            'id' => 'required',
-        ]);
+        try {
+            $validated = $request->validate([
+                'delete' => 'required',
+                'id' => 'required',
+            ]);
 
-        if(!(strtoupper($validated['delete'])=="CONFIRMAR")) return redirect()->route('user.index')->with('success','Error al restablecer');
-        $time = Carbon::now('America/Lima');
-        $id=$validated['id'];
-        $user=User::findorFail($id);
-        $fullname=$user->name;
-        $phone=$user->phone;
-        $password=generatorPassword($fullname,'update',$phone).$time->format('Y').$time->format('m').$time->format('d');
-        $user->password = bcrypt($password);
-        $user->save();
-        $receivers = $user->email;
-        Mail::to($receivers)->send(new Password($password));
-        Storage::disk('public')->put("password/file.txt", $password);
-        return redirect()->route('user.index')->with('success','Contraseña restablecida');
+            if(!(strtoupper($validated['delete'])=="CONFIRMAR")) return redirect()->route('user.index')->with('error','Error al restablecer');
+            $time = Carbon::now('America/Lima');
+            $id=$validated['id'];
+            $user=User::findorFail($id);
+            $fullname=$user->name;
+            $phone=$user->phone;
+            $password=generatorPassword($fullname,'update',$phone).$time->format('Y').$time->format('m').$time->format('d');
+            $user->password = bcrypt($password);
+            $user->save();
+            $receivers = $user->email;
+            Mail::to($receivers)->send(new Password($password));
+            return redirect()->route('user.index')->with('success','Contraseña restablecida');
+        }catch (\Exception $e) {
+            return redirect()->route('user.index')->with('error', $e->getMessage());
+        }
     }
     public function destroy(Project $project)
     {
@@ -117,26 +120,24 @@ class UserController extends Controller
     }
     public function update_profile(Request $request)
     {
-        $user=User::find(Auth::user()->id);
 
-        $validated = $request->validate([
-            'fullname'=>'required|min:10|max:255',
-            'phone' => 'required|min:9|max:9',
-            'image'=>['required','image']
-        ]);
-
-        if($user && $validated)
-        {
-            $user->perfil=$ruteImage=$validated['image']->store('image/avatars/profiles','public');
-            $user->name=$validated['fullname'];
-            $user->phone=$validated['phone'];
-            Session::flash('success', 'Se actualizo con exitosamente');
-            $user->save();
+        try {
+            $validated = $request->validate([
+                'fullname'=>'required|min:10|max:255',
+                'phone' => 'required|min:9|max:9',
+                'image'=>['required','image']
+            ]);
+            $user=User::find(Auth::user()->id);
+            if($user && $validated)
+            {
+                $user->perfil=$ruteImage=$validated['image']->store('image/avatars/profiles','public');
+                $user->name=$validated['fullname'];
+                $user->phone=$validated['phone'];
+                $user->save();
+            }
+            return redirect()->back()->with('success','Se actualizo con exitosamente');
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-        else
-        {
-            Session::flash('success', 'Error al actualizar');
-        }
-        return redirect()->back();
     }
 }

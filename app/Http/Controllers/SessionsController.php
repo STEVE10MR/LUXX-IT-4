@@ -19,16 +19,21 @@ class SessionsController extends Controller
     public function store(SessionsFormUser $request)
     {
         $validate=$request->validated();
+
         if(Auth::attempt(['email' => $validate['email'], 'password' => $validate['password']])== false)
         {
             return redirect()->to('/')->with('error','Su email no existe');
         }
         else
         {
-
             if (((Auth::user()->is_email_verified == 0)?true:false)) {
                 Auth::logout();
                 return redirect()->route('Inicio')->with('error', 'Confirme su email');
+            }
+            elseif(((Auth::user()->status == 0)?true:false))
+            {
+                Auth::logout();
+                return redirect()->route('Inicio')->with('error', 'Estado inactivo su email');
             }
             else
             {

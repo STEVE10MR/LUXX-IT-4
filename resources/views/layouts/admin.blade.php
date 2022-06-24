@@ -43,9 +43,6 @@
                             class="fas fa-power-off me-2"></i>Cerrar Sesion</a>
                 </div>
             </div>
-            <!-- /#sidebar-wrapper -->
-
-            <!-- Page Content -->
             <div id="page-content-wrapper">
                 <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
                     <div class="d-flex align-items-center">
@@ -56,7 +53,12 @@
                 @yield('content')
             </div>
         </div>
-
+        @if (session('success'))
+            @include('modal_subject.success')
+        @elseif (session('error'))
+            @include('modal_subject.error')
+        @endif
+        <div class="overlay hidden"></div>
     </div>
     <script>
         var el = document.getElementById("wrapper");

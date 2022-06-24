@@ -27,6 +27,7 @@
 
 </head>
 <body>
+
     <div id="app">
 
         <div class="collapse show" id="navbarToggleExternalContent" >
@@ -198,8 +199,15 @@
             </div>
             </div>
         </div>
+
+        @if (session('success'))
+            @include('modal_subject.success')
+        @elseif (session('error'))
+            @include('modal_subject.error')
+        @endif
         <div class="overlay hidden"></div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://checkout.culqi.com/js/v3"></script>
     @stack('scripts')

@@ -2,13 +2,6 @@
 @section('title','Registro')
 @section('content')
 
-
-@if (session('validatex'))
-    <div class="alert alert-success" role="alert">
-        {{ __(session('validatex')) }}
-    </div>
-@endif
-
 <div class="container container-web-page">
     <h3 class="font-weight-bold poppins-regular text-uppercase form-text-h1">Crear cuenta</h3>
     <p class="text-justify form-text-label">Al crear una cuenta en nuestro sitio web usted acepta nuestros <a href="#">términos y condiciones</a>. La información introducida en el formulario debe de ser clara, precisa y legitima. Para crear una cuenta debe de llenar todos los campos que son obligatorios marcados con el icono <i class="fab fa-font-awesome-alt"></i></p>

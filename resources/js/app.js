@@ -42,7 +42,16 @@ const toggler = document.querySelector(".navbar-toggler");
 
 ///////////////////////////////////////
 
+const subject = document.querySelector(".subject");
+const subjectClose = document.querySelector(".subject_close");
+//////////////////////////////////////
+
 ///
+if (subjectClose) {
+    subjectClose.addEventListener("click", function (e) {
+        subject.classList.add("hidden");
+    });
+}
 
 const functionOpenModal = function (modal) {
     if (

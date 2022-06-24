@@ -19,7 +19,7 @@ DB::listen(function($query)
 });
 */
 
-
+Route::view('/modal_test','modal_subject.subject');
 Route::get('firebase','App\Http\Controllers\FirebaseController@index');
 
 Route::get('/','App\Http\Controllers\ClientController@index')->name('Inicio');

@@ -9,7 +9,7 @@ class Passwordresets extends Model
 {
     protected $table = "password_resets";
     protected $primaryKey = "id";
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable=[
         'email',
         'token',

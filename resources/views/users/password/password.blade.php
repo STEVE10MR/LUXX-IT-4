@@ -43,11 +43,7 @@
                                     </span>
                             @enderror
                             <br>
-                            @if (session('error'))
-                                <div class="error" role="alert">
-                                    {{ __(session('error')) }}
-                                </div>
-                            @endif
+                    
                         </div>
 
                         <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="{{route('Inicio')}}">Regresar al menu?</a></p>
@@ -60,6 +56,12 @@
             </div>
             </div>
         </div>
+        @if (session('success'))
+            @include('modal_subject.success')
+        @elseif (session('error'))
+            @include('modal_subject.error')
+        @endif
+        <div class="overlay hidden"></div>
     </div>
 </body>
 </html>
