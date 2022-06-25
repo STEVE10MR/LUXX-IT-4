@@ -11,11 +11,17 @@
               <a href="{{route('user.profile')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">
                 Informacion de Perfil
               </a>
+              @if (Auth::user()->role == "USER")
               <a href="{{route('user.orders')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">
                 Mis Pedidos
               </a>
               <a href="{{route('user.address')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">
                 Direccion de Entrega
+              @elseif (Auth::user()->role == "REPA")
+              <a href="{{route('delivery.deliveries')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">
+                Mis Entregas
+              @endif
+
               </a>
             </nav>
           </div>

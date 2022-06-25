@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\User;
 
 function load()
@@ -7,12 +8,23 @@ function load()
     $countCart=0;
     $perfil=null;
     if (Auth::check()) {
-        $countCart=DB::table('cart')->where('user_id', '=', Auth::user()->id)->get()->count();
+        $user=User::find(Auth::user()->id);
+        $perfil=$user->perfil;
+        if(Auth::user()->role == "USER"){
+            $countCart=DB::table('cart')->where('user_id', '=', Auth::user()->id)->get()->count();
+        }
+        elseif(Auth::user()->role == "REPA")
+        {
+            $time = Carbon::now('America/Lima');
+            $date=$time->format('Y-m-d');
+            $countCart=DB::table('orders')->whereNull('orders.delivery_id')->where('created_at','LIKE',''.$date.'%')->get()->count();
+        }
         $user=User::find(Auth::user()->id);
         $perfil=$user->perfil;
     }
     return ['countCart'=>$countCart,'perfil'=>$perfil];
 }
+
 function generatorPassword($name,$surname,$phone)
 {
 

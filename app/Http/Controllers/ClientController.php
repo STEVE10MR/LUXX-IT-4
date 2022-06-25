@@ -22,6 +22,7 @@ class ClientController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except('index');
+        $this->middleware('client')->only(['add_cart','add_cart_detail']);
     }
     public function load()
     {

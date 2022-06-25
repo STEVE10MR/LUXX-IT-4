@@ -49,9 +49,7 @@
                         <li class="nav-item">
                             <a class="nav-link color text_link" href="{{route('products.create_menu')}}">Menu</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link color text_link" href="#">Galeria</a>
-                        </li>
+
                     </ul>
 
                     <ul class="nav flex-row mov">
@@ -61,13 +59,14 @@
                                 <a class="nav-link color text_link btn--show-modal login" data-mdb-toggle="" data-mdb-target="#" role="button">{{ __('Hola, Identificate') }}</a>
                             </li>
                         @endguest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('client.open_carrito')}}">
-                            <span class="badge badge-pill bg-danger countcart">{{$countCart}}</span>
-                            <span><i class="fas fa-shopping-cart color"></i></span>
-                            </a>
-                        </li>
+
                         @if(Auth::check())
+
+                            @if(Auth::user()->role == "USER")
+                                @include('layouts.user.cart')
+                            @elseif(Auth::user()->role == "REPA")
+                                @include('layouts.user.order')
+                            @endif
                             <li class="nav-item dropdown">
                                 <a
                                 id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre

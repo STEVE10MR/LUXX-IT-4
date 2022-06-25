@@ -12520,3 +12520,11 @@ select::-ms-expand {
 .color_subject {
   color: #fff;
 }
+
+.color_dark {
+  color: #000;
+}
+
+.color_green {
+  color: rgb(13, 144, 48);
+}

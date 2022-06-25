@@ -1,7 +1,7 @@
 @extends('users.profiles.index')
 @section('tab-pane')
 <h6>
-    MIS PEDIDOS</h6>
+    MIS ENTREGAS</h6>
   <hr>
 <div class="col">
     <table class="table bg-white rounded shadow-sm  table-hover">
@@ -11,8 +11,8 @@
                 <th scope="col">Productos</th>
                 <th scope="col">Direccion</th>
                 <th scope="col">Monto</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Tipo de pago</th>
+                <th scope="col">Entregado</th>
+                <th scope="col">Tiempo de Entrega</th>
             </tr>
         </thead>
         <tbody class="link-master deactivate-modal">
@@ -29,8 +29,8 @@
                         </td>
                         <td>{{$value->reference}}</td>
                         <td>{{$value->amount}}</td>
-                        <td>{{$value->status}}</td>
-                        <td>{{$value->pay_type}}</td>
+                        <td>{{($value->recept) == '1'? 'Entregado' : 'No entregado'}}</td>
+                        <td>{{$value->updated_at->diffForHumans()}}</td>
                     </tr>
                 @endforeach
             @endif
@@ -42,4 +42,3 @@
 <br>
 
 @endsection
-

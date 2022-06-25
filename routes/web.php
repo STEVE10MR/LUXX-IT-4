@@ -80,8 +80,10 @@ Route::post('/account/address','App\Http\Controllers\AddressController@store')->
 Route::delete('/account/address/{id}','App\Http\Controllers\AddressController@destroy')->name('address.destroy');
 
 Route::get('/account/management','App\Http\Controllers\UserController@management')->name('user.management');
-
 Route::get('/account/orders','App\Http\Controllers\OrdersController@my_orders')->name('user.orders');
+
+Route::get('/orders','App\Http\Controllers\OrdersController@deliver_orders')->name('delivery.orders');
+Route::get('/account/deliveries','App\Http\Controllers\OrdersController@my_deliveries')->name('delivery.deliveries');
 
 //Auth::routes();
 

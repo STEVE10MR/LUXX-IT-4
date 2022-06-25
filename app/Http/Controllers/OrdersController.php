@@ -12,7 +12,7 @@ class OrdersController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
-        $this->middleware('admin')->except('my_orders');
+        $this->middleware('admin')->except(['my_orders','deliver_orders','my_deliveries']);
     }
     public function index(){
 
@@ -91,6 +91,75 @@ class OrdersController extends Controller
         }
 
         return view('users.profiles.orders',['countCart'=>$countCart,'perfil'=>$perfil,'orders'=>$orders,'resumeProducts'=>$resumeProducts]);
+    }
+    function my_deliveries()
+    {
+        $load=load();
+        $countCart=$load['countCart'];
+        $perfil=$load['perfil'];
+
+        $orders=DB::table('orders')
+        ->select('orders.id','reference','amount','recept','updated_at')
+        ->orderBy('created_at',request('sorted','ASC'))
+        ->join('address','address.id','=','orders.address_id')
+        ->where('delivery_id','=',Auth::user()->id)
+        ->get();
+
+        $resumeProducts=array();
+        //return $orders;
+        foreach($orders as $order)
+        {
+            $order->updated_at=Carbon::parse($order->updated_at);
+            $orderDetails=DB::table('ordersdetails')
+            ->select('name')
+            ->join('products','products.id','=','ordersdetails.product_id')
+            ->where('ordersdetails.order_id','=',$order->id)
+            ->get();
+            $resumeProducts[$order->id]=json_decode($orderDetails,true);
+
+        }
+
+        return view('users.profiles.deliveries',['countCart'=>$countCart,'perfil'=>$perfil,'orders'=>$orders,'resumeProducts'=>$resumeProducts]);
+    }
+    function deliver_orders()
+    {
+        $load=load();
+        $countCart=$load['countCart'];
+        $perfil=$load['perfil'];
+        $time = Carbon::now('America/Lima');
+        $date=$time->format('Y-m-d');
+        $user_id = Auth::user()->id;
+
+        $orderPending=DB::table('orders')
+        ->select('orders.id')
+        ->where('delivery_id','=',$user_id)
+        ->where('created_at','LIKE',''.$date.'%')
+        ->first();
+        $orderId=$orderPending->id;
+
+        $orders=DB::table('orders')
+        ->join('address','address.id','=','orders.address_id')
+        ->select('orders.id','reference','status','amount','pay_type','orders.created_at')
+        ->whereNull('orders.delivery_id')
+        ->where('created_at','LIKE',''.$date.'%')
+        ->orWhere('orders.id','=',$orderPending->id)
+        ->orderBy('created_at','ASC')
+        ->get();
+
+        $resumeProducts=array();
+        //return $orders;
+        foreach($orders as $order)
+        {
+            $order->created_at=Carbon::parse($order->created_at);
+            $orderDetails=DB::table('ordersdetails')
+            ->select('name')
+            ->join('products','products.id','=','ordersdetails.product_id')
+            ->where('ordersdetails.order_id','=',$order->id)
+            ->get();
+            $resumeProducts[$order->id]=json_decode($orderDetails,true);
+
+        }
+        return view('orders.order',['countCart'=>$countCart,'perfil'=>$perfil,'orders'=>$orders,'resumeProducts'=>$resumeProducts,'orderPending'=>$orderId]);
     }
     function statistics()
     {

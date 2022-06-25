@@ -84,12 +84,14 @@ class ProductsController extends Controller
 
     public function create_menu(Request $request)
     {
+
         $load=load();
         $countCart=$load['countCart'];
         $perfil=$load['perfil'];
         $busqueda=$request->get('search')?$request->get('search'):'';
         $order=$request->get('order')?$request->get('order'):'';
         $cat=$request->get('category')?$request->get('category'):'';
+
 
         $category=Category::select('id','category')->get();
 
