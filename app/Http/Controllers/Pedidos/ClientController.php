@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pedidos;
 
 use Culqi\Culqi;
 use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\User;
+use App\Mail\Rechnung;
 use App\Models\Orders;
 use App\Models\Address;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\OrdersDetails;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 
@@ -212,17 +215,18 @@ class ClientController extends Controller
             $order->client_id=$user_id;
             $order->address_id=$address_id;
             $order->status='En espera';
-            $order->recept='----';
+            $order->recept='0';
             $order->amount=$total;
             $order->pay_type=$method;
             $order->save();
 
+            $order_id=$order->id;
             $cont=0;
             $cart = Cart::where('user_id','=',$user_id)->get();
             foreach(json_decode($products,true) as $product)
             {
                 $orderdetail= new OrdersDetails;
-                $orderdetail->order_id= $order->id;
+                $orderdetail->order_id= $order_id;
                 $orderdetail->product_id=$product['id'];
                 $orderdetail->quantity=intval($product['quantity']);
                 $orderdetail->price=floatval($product['price']);
@@ -232,6 +236,18 @@ class ClientController extends Controller
                 $carDel->delete();
                 $cont = $cont+1;
             }
+            $time = Carbon::now('America/Lima');
+
+            $userReceiver=User::findOrFail($user_id);
+            $name=$userReceiver->name;
+            $date=$time->format('Y-m-d');
+            $receivers=$userReceiver->email;
+
+
+
+
+
+            Mail::to($receivers)->send(new Rechnung($name,$receivers,json_decode($products,true),$total,$date,$order_id));
             return redirect()->route('Inicio')->with('success', 'Se registro correctamente su orden');
         }catch (\Exception $e) {
             return redirect()->route('Inicio')->with('error', $e->getMessage());

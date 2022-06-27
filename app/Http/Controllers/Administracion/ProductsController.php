@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Administracion;
 
 use App\Models\Category;
 use App\Models\Products;
@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Controller;
 
 
 
@@ -115,8 +116,8 @@ class ProductsController extends Controller
             $searchOrder="name";
             $type="asc";
         }
-
-        $products=Products::join('category', 'category.id', '=', 'products.category_id')->orderBy($searchOrder,$type)->Where('name', 'like', '%' .$busqueda. '%')->whereBetween('category_id',[$cat?$cat:1,$cat?$cat:1000])->paginate(10);
+        //
+        $products=Products::join('category', 'category.id', '=', 'products.category_id')->orderBy($searchOrder,$type)->Where('name', 'like', '%' .$busqueda. '%')->Where('status','=','1')->whereBetween('category_id',[$cat?$cat:1,$cat?$cat:1000])->paginate(10);
         $results=count($products);
         $resultsSearch=$busqueda;
 

@@ -65,7 +65,7 @@
 
         const direccion=document.getElementById('direccion');
         const buttonCheckout=document.getElementById('buyButton');
-        
+
         direccion.addEventListener('change',function(e)
         {
             if(this.value)
@@ -97,8 +97,6 @@
                 let user_id  = '<?= $user_id ?>';
                 let total = '<?= floatval($total) ?>';
                 let address_id = direccion.value;
-
-                alert('Se envio');
                 return window.location="../cart/checkout/"+products+"/"+user_id+"/"+total+"/"+token+"/"+address_id+'/culqi';
             }
             else {

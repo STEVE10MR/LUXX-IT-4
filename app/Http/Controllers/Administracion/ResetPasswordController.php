@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Administracion;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\Password_resets;
 use App\Models\Passwordresets;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Controller;
 
 class ResetPasswordController extends Controller
 {
@@ -23,7 +24,7 @@ class ResetPasswordController extends Controller
             $token=quickRandom(100);
             $receivers = $validated['email'];
             $emailUser=User::where('email','=',$receivers)->where('is_email_verified','=','1')->first();
-            
+
 
             $emailVerify=new Passwordresets;
             $emailVerify->email=$receivers;

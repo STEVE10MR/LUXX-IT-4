@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Ventas;
 
 use Carbon\Carbon;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class OrdersController extends Controller
 {
@@ -21,9 +22,9 @@ class OrdersController extends Controller
         $orders=DB::table('orders')
         ->join('users','users.id','=','orders.delivery_id')
         ->select('orders.id','users.name','orders.amount','orders.created_at')
-        ->where('recept','=','entregado')
+        ->where('recept','=','1')
         ->get();
-        $sales=DB::table('orders')->where('recept','=','entregado')->max('amount');
+        $sales=DB::table('orders')->where('recept','=','1')->max('amount');
         $countDelivery=DB::table('users')->Where('role','=','REPA')->count();
 
         $resumeProducts=array();
@@ -128,21 +129,23 @@ class OrdersController extends Controller
         $perfil=$load['perfil'];
         $time = Carbon::now('America/Lima');
         $date=$time->format('Y-m-d');
-        $user_id = Auth::user()->id;
+        $delivery_id = Auth::user()->id;
 
         $orderPending=DB::table('orders')
         ->select('orders.id')
-        ->where('delivery_id','=',$user_id)
-        ->where('created_at','LIKE',''.$date.'%')
+        ->where('delivery_id','=',$delivery_id)
+        ->where('recept','=','0')
+        ->orderBy('created_at','DESC')
         ->first();
-        $orderId=$orderPending->id;
+
+        $orderId=$orderPending?$orderPending->id:0;
 
         $orders=DB::table('orders')
         ->join('address','address.id','=','orders.address_id')
-        ->select('orders.id','reference','status','amount','pay_type','orders.created_at')
+        ->select('orders.id','orders.address_id','reference','status','amount','pay_type','orders.created_at')
         ->whereNull('orders.delivery_id')
         ->where('created_at','LIKE',''.$date.'%')
-        ->orWhere('orders.id','=',$orderPending->id)
+        ->orWhere('orders.id','=',$orderId)
         ->orderBy('created_at','ASC')
         ->get();
 
@@ -164,7 +167,7 @@ class OrdersController extends Controller
     function statistics()
     {
         $orders=DB::table('orders')
-        ->where('recept','=','entregado')
+        ->where('recept','=','1')
         ->get();
 
         $time = Carbon::now('America/Lima');

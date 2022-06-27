@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Administracion;
 
 use DateTime;
 use Carbon\Carbon;
@@ -9,6 +9,7 @@ use App\Models\Email_verify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SessionsFormUser;
+use App\Http\Controllers\Controller;
 
 class SessionsController extends Controller
 {
@@ -22,7 +23,7 @@ class SessionsController extends Controller
 
         if(Auth::attempt(['email' => $validate['email'], 'password' => $validate['password']])== false)
         {
-            return redirect()->to('/')->with('error','Su email no existe');
+            return redirect()->to('/')->with('error','Sus datos no coinciden con ninguna cuenta');
         }
         else
         {

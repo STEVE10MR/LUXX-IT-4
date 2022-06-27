@@ -91,7 +91,8 @@
             _getPosition() {
                 if (navigator.geolocation){
                     navigator.geolocation.getCurrentPosition(
-                        this._loadMap.bind(this),this._loadMapN.bind(this));
+                        this._loadMap.bind(this),this._loadMapN.bind(this),
+                        {frequency:5000, maximumAge: 0, timeout: 100, enableHighAccuracy:true});
                 }
             }
             _loadMap(position) {

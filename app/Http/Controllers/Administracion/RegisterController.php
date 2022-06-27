@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Administracion;
 
 use App\Models\User;
 use App\Mail\Verification;
@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Controller;
 
 
 class RegisterController extends Controller

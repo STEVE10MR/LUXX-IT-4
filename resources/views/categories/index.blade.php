@@ -39,7 +39,7 @@
                     @if($categories)
                         @foreach ($categories as $value)
                             <tr>
-                                <th scope="row">1</th>
+                                <th scope="row">#</th>
                                 <td>{{$value->category}}</td>
                                 <td>{{$value->description}}</td>
                                 <td class="value-product">

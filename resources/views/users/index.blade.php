@@ -42,7 +42,7 @@
                     @if($user)
                         @foreach ($user as $value)
                             <tr>
-                                <th scope="row">1</th>
+                                <th scope="row">#</th>
                                 <td>{{$value->name}}</td>
                                 <td>{{$value->email}}</td>
                                 <td>{{$value->phone}}</td>

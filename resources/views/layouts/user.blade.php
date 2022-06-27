@@ -85,6 +85,8 @@
                                     @if(Auth::user()->role == "USER")
                                         <a class="dropdown-item" href="{{route('user.orders')}}">{{ __('Mis Pedidos') }}</a>
                                         <a class="dropdown-item" href="{{route('user.address')}}">{{ __('Direcciones de Entrega') }}</a>
+                                    @elseif (Auth::user()->role == "REPA")
+                                        <a href="{{route('delivery.deliveries')}}" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded form-color-black color-active">{{ __('Mis Entregas') }}</a>
                                     @endif
                                     <a class="dropdown-item" href="{{route('session.destroy')}}">{{ __('Cerrar Sesion') }}</a>
 

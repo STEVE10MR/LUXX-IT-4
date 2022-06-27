@@ -41,7 +41,7 @@
                     @if($product)
                         @foreach ($product as $value)
                             <tr>
-                                <th scope="row">1</th>
+                                <th scope="row">#</th>
                                 <td>{{$value->name}}</td>
                                 <td>{{$value->category}}</td>
                                 <td>{{$value->price}}</td>

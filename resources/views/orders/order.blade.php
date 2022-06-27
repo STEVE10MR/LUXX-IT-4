@@ -47,8 +47,10 @@
                                             <td>{{$value->pay_type}}</td>
                                             <td>{{$value->created_at->diffForHumans()}}</td>
                                             <td>
-                                                <form action="" method="post">
+                                                <form action="{{route('firebase.create')}}" method="get">
                                                     @csrf
+                                                    <input type="hidden" name="address_id" value="{{$value->address_id}}">
+                                                    <input type="hidden" name="order_id" value="{{$value->id}}">
                                                     <button class="btn btn-dark btn-block btn-lg button_map" data-id="{{$value->id}}" id="button_map" data-mdb-ripple-color="dark"><i class="font_awesome fa-solid fa-play color_green"></i></button>
                                                 </form>
                                             </td>
@@ -85,7 +87,7 @@
 
             element.disabled=true;
             element.children[0].classList.add('color');
-            element.children[0].classList.remove('color_green')
+            element.children[0].classList.remove('color_green');
         });
     }
 
