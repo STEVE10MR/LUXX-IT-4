@@ -64,7 +64,7 @@ class SessionsController extends Controller
             $user->is_email_verified=1;
             $user->save();
         }
-        return redirect()->route('home')->with('success','Registro con exito');
+        return redirect()->route('Inicio')->with('success','Registro con exito');
     }
 
 }

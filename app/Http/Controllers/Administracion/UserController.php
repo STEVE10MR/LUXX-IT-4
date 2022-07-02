@@ -6,13 +6,15 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Mail\Password;
 use App\Models\Products;
+use App\Mail\Verification;
+use App\Models\Email_verify;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveFormUser;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -61,11 +63,31 @@ class UserController extends Controller
             $user->phone = $validated['phone'];
             $user->password = bcrypt($password);
             $user->role = 'REPA';
+            //
+            //$user->is_email_verified = '1';
+            //
             $user->email = $validated['email'];
             $user->perfil='image/avatars/profiles/avatar-1.jpg';
             $user->save();
+
+
             $receivers = $validated['email'];
             Mail::to($receivers)->send(new Password($password));
+
+            $token=quickRandom(100);
+            $emailVerify=Email_verify::where('email','=',$validated['email'])->first();
+            if($emailVerify)
+            {
+                return redirect()->route('Inicio')->with('success', 'Verificacion Enviada');
+            }
+            else
+            {
+                $emailVerify=new Email_verify;
+                $emailVerify->email=$receivers;
+                $emailVerify->token=$token;
+                $emailVerify->save();
+            }
+            Mail::to($receivers)->send(new Verification($token));
             return redirect()->route('user.index')->with('success', 'Registro con exito');
         }catch (\Exception $e) {
             return redirect()->route('user.index')->with('error', $e->getMessage());
@@ -121,7 +143,6 @@ class UserController extends Controller
     }
     public function update_profile(Request $request)
     {
-
         try {
             $validated = $request->validate([
                 'fullname'=>'required|min:10|max:255',
@@ -131,7 +152,8 @@ class UserController extends Controller
             $user=User::find(Auth::user()->id);
             if($user && $validated)
             {
-                $user->perfil=$ruteImage=$validated['image']->store('image/avatars/profiles','public');
+                $ruteImage=$validated['image']->store('image/avatars/profiles','public');
+                $user->perfil=$ruteImage;
                 $user->name=$validated['fullname'];
                 $user->phone=$validated['phone'];
                 $user->save();

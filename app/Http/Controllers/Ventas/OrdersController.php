@@ -24,7 +24,6 @@ class OrdersController extends Controller
         ->select('orders.id','users.name','orders.amount','orders.created_at')
         ->where('recept','=','1')
         ->get();
-        $sales=DB::table('orders')->where('recept','=','1')->max('amount');
         $countDelivery=DB::table('users')->Where('role','=','REPA')->count();
 
         $resumeProducts=array();
@@ -62,7 +61,7 @@ class OrdersController extends Controller
         }
         //return $amountACT;
         $increment=intval((($amountACT/($amountANT == 0? 1:$amountANT))-1)*100);
-        return view('orders.panel',['countProduct'=>$countProduct,'sales'=>$sales,'countDelivery'=>$countDelivery,'orders'=>$orders,'resumeProducts'=>$resumeProducts,'increment'=>$increment]);
+        return view('orders.panel',['countProduct'=>$countProduct,'sales'=>$amountACT,'countDelivery'=>$countDelivery,'orders'=>$orders,'resumeProducts'=>$resumeProducts,'increment'=>$increment]);
 
     }
     function my_orders()

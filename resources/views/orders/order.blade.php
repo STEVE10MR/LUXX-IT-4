@@ -47,7 +47,7 @@
                                             <td>{{$value->pay_type}}</td>
                                             <td>{{$value->created_at->diffForHumans()}}</td>
                                             <td>
-                                                <form action="{{route('firebase.create')}}" method="get">
+                                                <form action="{{route('firebase.create')}}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="address_id" value="{{$value->address_id}}">
                                                     <input type="hidden" name="order_id" value="{{$value->id}}">

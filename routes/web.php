@@ -87,8 +87,10 @@ Route::get('/account/deliveries','App\Http\Controllers\Ventas\OrdersController@m
 
 //
 
-Route::get('/orders/map','App\Http\Controllers\Pedidos\FirebaseController@create')->name('firebase.create');
 Route::post('/orders/map/checkout','App\Http\Controllers\Pedidos\FirebaseController@update')->name('firebase.update');
+Route::post('/orders/map','App\Http\Controllers\Pedidos\FirebaseController@create')->name('firebase.create');
+
+Route::post('/orders/map/load','App\Http\Controllers\Pedidos\FirebaseController@load')->name('firebase.load');
 
 //Auth::routes();
 

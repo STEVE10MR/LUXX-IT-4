@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Pedidos;
 
+use Carbon\Carbon;
 use Kreait\Firebase;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use Illuminate\Support\Facades\DB;
 use Kreait\Firebase\ServiceAccount;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class FirebaseController extends Controller
 {
@@ -19,6 +20,9 @@ class FirebaseController extends Controller
     function __construct()
     {
         $this->middleware('auth');
+
+
+        //initDatabase
         /*
         $serviceAccount = ServiceAccount::fromJsonFile('../key/realtime-9e386-firebase-adminsdk-bz0ag-5f86b33375.json');
         $this->firebase = (new Factory)
@@ -28,13 +32,33 @@ class FirebaseController extends Controller
 
         $this->database = $this->firebase->getDatabase();
         */
-    }
-    function Map()
-    {
-        $reference = $this->database->getReference('delivery/coord');
-        $reference->push(['delivery_id'=>1,'lat'=>2,'lon'=>1]);
 
-        print_r($reference->getvalue());
+
+    }
+    function load(Request $request)
+    {
+        /*
+        $ref = $this
+        ->database
+        ->getReference('delivery');
+
+        $time = Carbon::now('America/Lima');
+        $latitude=$request->lat;
+        $longitude=$request->lon;
+        $id=Auth::user()->id;
+
+        $user=$ref->set([
+            ('created_at'.$time)=>[
+                'id'=>$id,
+                'coords'=>[
+                    'latitude'=>$latitude,
+                    'longitude'=>$longitude
+                ],
+                'timestamp'=>$time,
+            ]
+        ]);
+        */
+
     }
     function create(Request $request)
     {
@@ -77,7 +101,6 @@ class FirebaseController extends Controller
     }
     function update(Request $request)
     {
-
         try
         {
             $validated = $request->validate([
@@ -89,7 +112,7 @@ class FirebaseController extends Controller
             $distance=intval($validated['distance']);
             $order_id=intval($validated['order_id']);
 
-            if($distance > 50) return redirect()->back()->with('error', 'No se encuentra dentro de la ubicacion');
+            if($distance > 50) return redirect()->route('delivery.orders')->with('error', 'No se encuentra dentro de la ubicacion');
 
             $order=Orders::findOrFail($order_id);
             $order->delivery_id=Auth::user()->id;

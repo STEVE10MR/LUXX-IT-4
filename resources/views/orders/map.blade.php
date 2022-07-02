@@ -41,6 +41,7 @@
     const endAddressElement=document.getElementById("endAddress");
     const durationElement=document.getElementById("duration");
     const distanceElement=document.getElementById("distance");
+
     class App {
       #map;
       #directionsService;
@@ -52,9 +53,7 @@
       constructor() {
         this._getPosition();
       }
-      _getPosition() {
-        this._loadMap();
-      }
+
       _getPosition() {
             if (navigator.geolocation){
                 navigator.geolocation.watchPosition(
@@ -71,17 +70,27 @@
         const { latitude } = position.coords;
         const { longitude } = position.coords;
 
-        this.#map = new google.maps.Map(
-          document.getElementById("map_canvas"),
-          {
-            center: new google.maps.LatLng(latitude,longitude),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI:true,
-            position:google.maps.ControlPosition.BOTTON_CENTER,
+        this._pushFirebase(latitude,longitude);
+
+        if(!this.#map)
+        {
+            this.#map = new google.maps.Map(
+            document.getElementById("map_canvas"),
+            {
+                center: new google.maps.LatLng(latitude,longitude),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI:true,
+                position:google.maps.ControlPosition.BOTTON_CENTER,
 
 
-          }
-        );
+            }
+            );
+
+        }
+        else
+        {
+            this.#map.center=new google.maps.LatLng(this.#lat,this.#lon)
+        }
 
         this.#directionsService = new google.maps.DirectionsService();
         this.#directionsRenderer = new google.maps.DirectionsRenderer();
@@ -107,11 +116,26 @@
           endAddressElement.textContent=endAddress;
           durationElement.textContent=duration;
           distanceElement.value=distance;
-
-
         });
-
       }
+      _pushFirebase(latitud=null,longitud=null)
+      {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $("input[name=_token]").val()
+                }
+            });
+            $.ajax(
+            {
+                type:'POST',
+                url:"{{ route('firebase.load') }}",
+                data:{lat:latitud,lon:longitud},
+                success:function()
+                {
+                    console.log("xxx");
+                }
+            })
+        }
     }
     const app = new App();
 </script>

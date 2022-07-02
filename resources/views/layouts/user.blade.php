@@ -11,7 +11,6 @@
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -72,9 +71,11 @@
                                 id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre
                                 >
                                 <img
-                                    src="{{URL::asset("storage/$perfil")}}"
 
-                                    class="rounded-circle"
+                                    src="/storage/{{$perfil}}"
+
+                                    class="rounded-circle image_change"
+                                    width="30"
                                     height="22"
                                     alt="img"
                                     loading="lazy"
