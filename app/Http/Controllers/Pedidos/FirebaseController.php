@@ -21,9 +21,8 @@ class FirebaseController extends Controller
     {
         $this->middleware('auth');
 
-
         //initDatabase
-        /*
+
         $serviceAccount = ServiceAccount::fromJsonFile('../key/realtime-9e386-firebase-adminsdk-bz0ag-5f86b33375.json');
         $this->firebase = (new Factory)
         ->withServiceAccount($serviceAccount)
@@ -31,34 +30,57 @@ class FirebaseController extends Controller
         ->create();
 
         $this->database = $this->firebase->getDatabase();
-        */
 
 
     }
     function load(Request $request)
     {
-        /*
-        $ref = $this
-        ->database
-        ->getReference('delivery');
-
         $time = Carbon::now('America/Lima');
         $latitude=$request->lat;
         $longitude=$request->lon;
         $id=Auth::user()->id;
+        $ref= $this
+        ->database
+        ->getReference("delivery/data/user_$id");
 
-        $user=$ref->set([
-            ('created_at'.$time)=>[
+
+        $post=[
                 'id'=>$id,
                 'coords'=>[
                     'latitude'=>$latitude,
                     'longitude'=>$longitude
                 ],
                 'timestamp'=>$time,
-            ]
-        ]);
+        ];
+        $user=$ref->set($post);
+
+
+        /*
+        foreach($ref->getValue() as $value)
+        {
+            $user=$value['id'];
+            if($id == $user){
+                $user=$ref->push($user);
+            }
+
+        }
         */
 
+    }
+    function create_map()
+    {
+        return view('map.mapa');
+
+    }
+    function load_map()
+    {
+        $time = Carbon::now('America/Lima');
+
+        $ref= $this
+        ->database
+        ->getReference("delivery/data");
+        $users=($ref->getValue());
+        return $users;
     }
     function create(Request $request)
     {
@@ -134,6 +156,18 @@ class FirebaseController extends Controller
 
         print_r($reference->getvalue());
         */
+    }
+    function show_delivery(Request $request)
+    {
+        try
+        {
+            $id=$request->id;
+            $user=DB::table('users')->select('name','phone')->find($id);
+            return [$user->name,$user->phone];
+        }
+        catch (\Exception $e) {
+            return "error";
+        }
     }
 }
 

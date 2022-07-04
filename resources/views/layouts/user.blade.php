@@ -11,6 +11,8 @@
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
+    <!-- Scripts -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>-->
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -34,7 +36,8 @@
                 <a class="navbar-brand" href="#">
                     <img
                     src="{{URL::asset('asset/logo/logo.png')}}"
-                    height="90"
+                    width="30"
+                    height="22"
                     alt="Portrait of a Woman"
                     loading="lazy"
                     />
@@ -71,8 +74,7 @@
                                 id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre
                                 >
                                 <img
-
-                                    src="/storage/{{$perfil}}"
+                                    src="{{URL::asset("storage/$perfil")}}"
 
                                     class="rounded-circle image_change"
                                     width="30"

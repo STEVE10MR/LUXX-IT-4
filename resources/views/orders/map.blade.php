@@ -71,7 +71,6 @@
         const { longitude } = position.coords;
 
         this._pushFirebase(latitude,longitude);
-
         if(!this.#map)
         {
             this.#map = new google.maps.Map(
@@ -91,7 +90,6 @@
         {
             this.#map.center=new google.maps.LatLng(this.#lat,this.#lon)
         }
-
         this.#directionsService = new google.maps.DirectionsService();
         this.#directionsRenderer = new google.maps.DirectionsRenderer();
 
@@ -132,7 +130,7 @@
                 data:{lat:latitud,lon:longitud},
                 success:function()
                 {
-                    console.log("xxx");
+                    console.log("enviado");
                 }
             })
         }

@@ -63,6 +63,7 @@ class UserController extends Controller
             $user->phone = $validated['phone'];
             $user->password = bcrypt($password);
             $user->role = 'REPA';
+            $user->status = '1';
             //
             //$user->is_email_verified = '1';
             //
@@ -88,6 +89,7 @@ class UserController extends Controller
                 $emailVerify->save();
             }
             Mail::to($receivers)->send(new Verification($token));
+
             return redirect()->route('user.index')->with('success', 'Registro con exito');
         }catch (\Exception $e) {
             return redirect()->route('user.index')->with('error', $e->getMessage());
@@ -143,6 +145,7 @@ class UserController extends Controller
     }
     public function update_profile(Request $request)
     {
+
         try {
             $validated = $request->validate([
                 'fullname'=>'required|min:10|max:255',
@@ -152,8 +155,7 @@ class UserController extends Controller
             $user=User::find(Auth::user()->id);
             if($user && $validated)
             {
-                $ruteImage=$validated['image']->store('image/avatars/profiles','public');
-                $user->perfil=$ruteImage;
+                $user->perfil=$ruteImage=$validated['image']->store('image/avatars/profiles','public');
                 $user->name=$validated['fullname'];
                 $user->phone=$validated['phone'];
                 $user->save();

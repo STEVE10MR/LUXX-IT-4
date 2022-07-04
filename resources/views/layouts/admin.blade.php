@@ -11,11 +11,15 @@
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+     <!-- KJS QUERY -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
@@ -33,6 +37,8 @@
                             class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a href="{{route('statistics')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-chart-line me-2"></i>Análisis</a>
+                    <a href="{{route('firebase.create_map')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                            class="fas fa-map me-2"></i>Mapa</a>
                     <a href="{{route('user.index')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                             class="fas fa-shopping-cart me-2"></i>Gestion de Repartidores</a>
                     <a href="{{route('product.index')}}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i

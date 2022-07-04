@@ -87,11 +87,15 @@ Route::get('/account/deliveries','App\Http\Controllers\Ventas\OrdersController@m
 
 //
 
+//proteger
 Route::post('/orders/map/checkout','App\Http\Controllers\Pedidos\FirebaseController@update')->name('firebase.update');
 Route::post('/orders/map','App\Http\Controllers\Pedidos\FirebaseController@create')->name('firebase.create');
+Route::get('/panel/map','App\Http\Controllers\Pedidos\FirebaseController@create_map')->name('firebase.create_map');
+Route::get('/panel/map/load','App\Http\Controllers\Pedidos\FirebaseController@load_map')->name('firebase.load_map');
 
 Route::post('/orders/map/load','App\Http\Controllers\Pedidos\FirebaseController@load')->name('firebase.load');
+Route::get('/orders/map/load/user','App\Http\Controllers\Pedidos\FirebaseController@show_delivery')->name('firebase.return_delivery');
+
 
 //Auth::routes();
-
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');

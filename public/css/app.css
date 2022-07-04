@@ -12533,3 +12533,8 @@ select::-ms-expand {
   width: auto;
   height: auto;
 }
+
+.image_change {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
